@@ -1,0 +1,78 @@
+<section class="rare safe-area-page" dir="rtl">
+  <header>
+    <div>
+      <h1>طلب قطعة نادرة</h1>
+      <p>صوّر اللوحة أو القطعة وحدد الموديل والسعر المستهدف</p>
+    </div>
+    <a routerLink="/home">رجوع</a>
+  </header>
+
+  <form class="form" [formGroup]="form" (ngSubmit)="submit()">
+    <label>
+      موديل الجهاز
+      <input formControlName="deviceModel" placeholder="مثال: iPhone 12 Pro" />
+    </label>
+    <label>
+      اسم القطعة
+      <input formControlName="partName" placeholder="مثال: IC شحن / لوحة صوت" />
+    </label>
+    <div class="row">
+      <label>
+        الكمية
+        <input type="number" min="1" formControlName="quantity" />
+      </label>
+      <label>
+        السعر المستهدف
+        <input type="number" min="0" step="0.01" formControlName="targetPrice" />
+      </label>
+    </div>
+
+    <div class="upload">
+      <span>صورة القطعة / اللوحة</span>
+      <label class="drop">
+        <input type="file" accept="image/*" capture="environment" (change)="onPhoto($event)" />
+        @if (preview(); as url) {
+          <img [src]="url" alt="معاينة" />
+        } @else {
+          <em>الكاميرا أو اختيار ملف</em>
+        }
+      </label>
+    </div>
+
+    @if (error()) {
+      <p class="err">{{ error() }}</p>
+    }
+
+    <button type="submit" [disabled]="submitting()">
+      {{ submitting() ? 'جارٍ الإرسال…' : 'إرسال الطلب' }}
+    </button>
+  </form>
+
+  <h2>طلباتي</h2>
+  <div class="list">
+    @for (req of requests(); track req.id) {
+      <article>
+        <img [src]="mediaUrl(req.photoUrl)" [alt]="req.partName" width="64" height="64" />
+        <div>
+          <strong>{{ req.partName }}</strong>
+          <small>{{ req.deviceModel }} · ×{{ req.quantity }}</small>
+          <span class="badge">{{ statusLabel(req.status) }}</span>
+          @if (req.status === 'QUOTED') {
+            <p class="quote">
+              عرض: {{ req.quotePrice | currency: 'EGP':'symbol-narrow':'1.2-2' }}
+              @if (req.estimatedArrival) {
+                · وصول {{ req.estimatedArrival | date: 'mediumDate' }}
+              }
+            </p>
+            @if (req.adminReply) {
+              <p class="reply">{{ req.adminReply }}</p>
+            }
+          }
+        </div>
+        <em>{{ req.targetPrice | currency: 'EGP':'symbol-narrow':'1.0-2' }}</em>
+      </article>
+    } @empty {
+      <p class="empty">لا توجد طلبات بعد.</p>
+    }
+  </div>
+</section>

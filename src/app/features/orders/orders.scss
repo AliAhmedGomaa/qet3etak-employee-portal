@@ -1,0 +1,83 @@
+.orders {
+  --page-pad-bottom: 2rem;
+  max-width: 28rem;
+  margin: 0 auto;
+  background: #f8fafc;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+header a {
+  color: #0d9a6a;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.card {
+  display: grid;
+  gap: 0.35rem;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  padding: 0.9rem 1rem 1rem;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95rem;
+}
+
+.top span {
+  color: #10b880;
+  font-weight: 800;
+}
+
+small {
+  color: #94a3b8;
+  font-size: 0.72rem;
+}
+
+.muted {
+  text-align: center;
+  color: #94a3b8;
+  padding: 2rem 1rem;
+}
+
+@media (min-width: 900px) {
+  .orders {
+    max-width: 52rem;
+    background: transparent;
+  }
+
+  header a {
+    display: none;
+  }
+
+  header h1 {
+    font-size: 1.75rem;
+  }
+
+  .list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+}

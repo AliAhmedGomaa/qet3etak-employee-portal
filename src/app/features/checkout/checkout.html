@@ -1,0 +1,74 @@
+<section class="checkout safe-area-page" dir="rtl">
+  <header>
+    <div>
+      <h1>إتمام الطلب</h1>
+      <p>{{ lines().length }} أصناف · {{ subtotal() | currency: 'EGP':'symbol-narrow':'1.2-2' }}</p>
+    </div>
+    <a routerLink="/catalog">الكتالوج</a>
+  </header>
+
+  @if (!lines().length) {
+    <p class="empty">السلة فارغة. <a routerLink="/catalog">أضف منتجات</a></p>
+  } @else {
+    <ul class="lines">
+      @for (line of lines(); track line.productId) {
+        <li>
+          <img [src]="line.imageUrl || 'icons/icon-192x192.png'" [alt]="line.title" width="52" height="52" />
+          <div class="info">
+            <strong>{{ line.title }}</strong>
+            <span>{{ unitPrice(line.basePrice, line.quantity, line.tieredPricing) | currency: 'EGP':'symbol-narrow':'1.2-2' }} × {{ line.quantity }}</span>
+            <div class="qty">
+              <button type="button" (click)="changeQty(line.productId, line.quantity - 1)">−</button>
+              <em>{{ line.quantity }}</em>
+              <button type="button" (click)="changeQty(line.productId, line.quantity + 1)">+</button>
+            </div>
+          </div>
+          <strong class="lt">{{ lineTotal(line.basePrice, line.quantity, line.tieredPricing) | currency: 'EGP':'symbol-narrow':'1.2-2' }}</strong>
+        </li>
+      }
+    </ul>
+
+    <div class="pay">
+      <h2>طريقة الدفع</h2>
+      <button
+        type="button"
+        class="pay-opt"
+        [class.on]="paymentMethod() === 'CREDIT'"
+        [class.disabled]="creditExceeded()"
+        [disabled]="creditExceeded()"
+        (click)="selectPayment('CREDIT')"
+      >
+        <strong>الدفع عبر الرصيد الائتماني (بالآجل)</strong>
+        <span>
+          @if (creditExceeded()) {
+            غير متاح — الحد الائتماني غير كافٍ (المتاح {{ availableCredit() | currency: 'EGP':'symbol-narrow':'1.0-2' }})
+          } @else {
+            المتاح {{ availableCredit() | currency: 'EGP':'symbol-narrow':'1.0-2' }} من أصل {{ wallet()?.creditLimit | currency: 'EGP':'symbol-narrow':'1.0-2' }}
+          }
+        </span>
+      </button>
+      <button
+        type="button"
+        class="pay-opt"
+        [class.on]="paymentMethod() === 'CASH_ON_DELIVERY'"
+        (click)="selectPayment('CASH_ON_DELIVERY')"
+      >
+        <strong>الدفع عند الاستلام</strong>
+        <span>بدون استخدام الرصيد الائتماني</span>
+      </button>
+    </div>
+
+    <label class="notes">
+      ملاحظات
+      <textarea [(ngModel)]="notes" rows="2" placeholder="اختياري"></textarea>
+    </label>
+
+    @if (error()) {
+      <p class="err">{{ error() }}</p>
+    }
+
+    <button type="button" class="submit" (click)="placeOrder()" [disabled]="submitting()">
+      {{ submitting() ? 'جارٍ الإرسال…' : 'تأكيد الطلب' }}
+    </button>
+  }
+</section>

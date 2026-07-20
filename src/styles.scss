@@ -1,0 +1,112 @@
+/* ——— Qet3etak Shop Owner · global tokens + Safe Area View ——— */
+
+:root {
+  --brand: #0f172a;
+  --accent: #10b880;
+  --surface: #ffffff;
+  --surface-muted: #f8fafc;
+  --ink: #0f172a;
+  --ink-muted: #64748b;
+
+  /*
+   * Safe-area insets (notch, Dynamic Island, home indicator, landscape edges).
+   * `constant()` covers iOS 11.0–11.2; `env()` covers modern iOS / Android PWAs.
+   */
+  --sat: constant(safe-area-inset-top);
+  --sat: env(safe-area-inset-top, 0px);
+  --sar: constant(safe-area-inset-right);
+  --sar: env(safe-area-inset-right, 0px);
+  --sab: constant(safe-area-inset-bottom);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: constant(safe-area-inset-left);
+  --sal: env(safe-area-inset-left, 0px);
+
+  /* Page gutters that always clear the unsafe zones */
+  --page-pad-x: 1rem;
+  --page-pad-top: 1rem;
+  --page-pad-bottom: 1.5rem;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  min-height: 100dvh;
+  direction: rtl;
+  font-family: 'IBM Plex Sans Arabic', ui-sans-serif, system-ui, sans-serif;
+  background: var(--surface-muted);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Prevent rubber-band scroll from revealing unsafe edges awkwardly */
+  overscroll-behavior-y: none;
+}
+
+/* Full-screen mobile page shell — use on every feature root */
+.safe-area-page {
+  box-sizing: border-box;
+  min-height: 100dvh;
+  min-height: 100svh;
+  padding-top: calc(var(--page-pad-top) + var(--sat));
+  padding-right: calc(var(--page-pad-x) + var(--sar));
+  padding-bottom: calc(var(--page-pad-bottom) + var(--sab));
+  padding-left: calc(var(--page-pad-x) + var(--sal));
+}
+
+/* Sticky/fixed headers that sit under the status bar */
+.safe-area-top {
+  padding-top: calc(0.75rem + var(--sat));
+  padding-left: calc(var(--page-pad-x) + var(--sal));
+  padding-right: calc(var(--page-pad-x) + var(--sar));
+}
+
+/* Fixed footers / bottom sheets / CTAs above the home indicator */
+.safe-area-bottom {
+  padding-bottom: calc(1rem + var(--sab));
+  padding-left: calc(var(--page-pad-x) + var(--sal));
+  padding-right: calc(var(--page-pad-x) + var(--sar));
+}
+
+/* Horizontal insets only (useful for full-bleed backgrounds) */
+.safe-area-x {
+  padding-left: calc(var(--page-pad-x) + var(--sal));
+  padding-right: calc(var(--page-pad-x) + var(--sar));
+}
+
+.pt-safe {
+  padding-top: var(--sat);
+}
+
+.pb-safe {
+  padding-bottom: var(--sab);
+}
+
+.px-safe {
+  padding-left: var(--sal);
+  padding-right: var(--sar);
+}
+
+/* Position helpers for fixed elements */
+.fixed-safe-bottom {
+  bottom: calc(1rem + var(--sab));
+  left: calc(1rem + var(--sal));
+  right: calc(1rem + var(--sar));
+}
+
+/* Desktop website canvas */
+@media (min-width: 900px) {
+  body {
+    background: #f1f5f9;
+  }
+}

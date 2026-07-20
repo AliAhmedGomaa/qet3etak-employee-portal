@@ -1,0 +1,213 @@
+.card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.1rem;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  display: grid;
+}
+
+.card__media {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  background: #0f172a;
+}
+
+.card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.grade {
+  position: absolute;
+  top: 0.65rem;
+  inset-inline-start: 0.65rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  backdrop-filter: blur(8px);
+}
+
+.grade--original {
+  background: #ecfdf6;
+  color: #074a35;
+}
+
+.grade--copy {
+  background: #eff6ff;
+  color: #1e3a8a;
+}
+
+.grade--used {
+  background: #fffbeb;
+  color: #92400e;
+}
+
+.grade--generic {
+  background: #f1f5f9;
+  color: #334155;
+}
+
+.card__body {
+  padding: 0.95rem 1rem 1.05rem;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.card__top h3 {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.35;
+  color: #0f172a;
+}
+
+.meta {
+  margin: 0.25rem 0 0.45rem;
+  color: #64748b;
+  font-size: 0.78rem;
+}
+
+.stock {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.5rem;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.stock--ok {
+  background: #ecfdf6;
+  color: #0b7a55;
+}
+
+.stock--low {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.stock--out {
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.card__price {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.unit {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.per {
+  color: #94a3b8;
+  font-size: 0.75rem;
+}
+
+.tier-tag {
+  margin-inline-start: 0.35rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #0d9a6a;
+  background: #ecfdf6;
+  padding: 0.1rem 0.4rem;
+  border-radius: 999px;
+}
+
+.total {
+  font-size: 1.05rem;
+  color: #10b880;
+}
+
+.qty {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.85rem;
+  padding: 0.25rem;
+  width: fit-content;
+}
+
+.qty--disabled {
+  opacity: 0.5;
+}
+
+.qty__btn {
+  width: 3rem;
+  height: 3rem;
+  border: 0;
+  border-radius: 0.7rem;
+  background: #0f172a;
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.qty__btn:disabled {
+  background: #cbd5e1;
+  cursor: not-allowed;
+}
+
+.qty__value {
+  min-width: 2.5rem;
+  text-align: center;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.matrix-toggle {
+  border: 0;
+  background: transparent;
+  color: #334155;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-height: 2.5rem;
+  padding: 0;
+  cursor: pointer;
+}
+
+.matrix {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+  background: #f8fafc;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.matrix th,
+.matrix td {
+  padding: 0.55rem 0.7rem;
+  text-align: start;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.matrix th {
+  color: #64748b;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.matrix tr.active {
+  background: #ecfdf6;
+  font-weight: 700;
+  color: #074a35;
+}

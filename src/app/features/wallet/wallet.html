@@ -1,0 +1,63 @@
+<section class="wallet safe-area-page" dir="rtl">
+  <header class="wallet__header">
+    <div>
+      <h1>محفظتي</h1>
+      <p>الحد الائتماني والدين الجاري</p>
+    </div>
+    <a routerLink="/home">رجوع</a>
+  </header>
+
+  @if (loading()) {
+    <div class="meter sk"></div>
+  } @else if (error()) {
+    <p class="err">{{ error() }}</p>
+  } @else if (wallet(); as w) {
+    <div class="meter">
+      <div class="meter__ring" [style.--pct]="w.utilization">
+        <div class="meter__core">
+          <strong>{{ w.utilization / 100 | percent: '1.0-0' }}</strong>
+          <span>مستخدم</span>
+        </div>
+      </div>
+      <div class="meter__stats">
+        <div>
+          <span>الائتمان المستخدم / الحد</span>
+          <strong>
+            {{ w.currentDebt | currency: 'EGP':'symbol-narrow':'1.0-2' }}
+            <em class="slash">/</em>
+            {{ w.creditLimit | currency: 'EGP':'symbol-narrow':'1.0-2' }}
+          </strong>
+        </div>
+        <div>
+          <span>الدين الحالي</span>
+          <strong class="debt">{{ w.currentDebt | currency: 'EGP':'symbol-narrow':'1.0-2' }}</strong>
+        </div>
+        <div>
+          <span>المتاح للطلب بالآجل</span>
+          <strong class="ok">{{ w.availableCredit | currency: 'EGP':'symbol-narrow':'1.0-2' }}</strong>
+        </div>
+      </div>
+    </div>
+
+    <h2>سجل العمليات</h2>
+    <ul class="ledger">
+      @for (tx of w.transactions; track tx.id || $index) {
+        <li>
+          <div>
+            <strong>{{ txLabel(tx.type) }}</strong>
+            <small>{{ tx.note }}</small>
+            @if (tx.createdAt) {
+              <time>{{ tx.createdAt | date: 'medium' }}</time>
+            }
+          </div>
+          <div class="amt" [class.neg]="tx.amount < 0" [class.pos]="tx.amount > 0">
+            {{ tx.amount | currency: 'EGP':'symbol-narrow':'1.2-2' }}
+            <small>الرصيد: {{ tx.balanceAfter | currency: 'EGP':'symbol-narrow':'1.0-2' }}</small>
+          </div>
+        </li>
+      } @empty {
+        <li class="empty">لا توجد عمليات بعد.</li>
+      }
+    </ul>
+  }
+</section>

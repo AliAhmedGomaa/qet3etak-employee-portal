@@ -1,0 +1,410 @@
+.landing {
+  --navy: #0f172a;
+  --navy-deep: #020617;
+  --emerald: #10b880;
+  --emerald-soft: rgba(16, 184, 128, 0.22);
+  --mist: rgba(248, 250, 252, 0.92);
+
+  min-height: 100dvh;
+  min-height: 100svh;
+  color: #f8fafc;
+  background: var(--navy-deep);
+  overflow-x: clip;
+}
+
+/* Mobile: app-like splash — hide website chrome */
+.landing__nav,
+.landing__site,
+.landing__footer {
+  display: none;
+}
+
+.landing__stage {
+  position: relative;
+  isolation: isolate;
+  min-height: 100dvh;
+  min-height: 100svh;
+  display: grid;
+  align-content: end;
+  padding:
+    calc(1.5rem + var(--sat))
+    calc(1.25rem + var(--sar))
+    calc(1.75rem + var(--sab))
+    calc(1.25rem + var(--sal));
+}
+
+.landing__glow {
+  position: absolute;
+  inset: -20% -10% auto;
+  height: 70%;
+  background:
+    radial-gradient(ellipse 70% 55% at 70% 20%, var(--emerald-soft), transparent 70%),
+    radial-gradient(ellipse 55% 45% at 15% 35%, rgba(56, 189, 248, 0.12), transparent 65%);
+  animation: landing-glow 8s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.landing__grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(248, 250, 252, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(248, 250, 252, 0.035) 1px, transparent 1px);
+  background-size: 3rem 3rem;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.55), transparent 78%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.landing__visual {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.landing__parts {
+  width: min(72vw, 22rem);
+  height: auto;
+  border-radius: 2rem;
+  opacity: 0.92;
+  filter: drop-shadow(0 24px 48px rgba(0, 0, 0, 0.45));
+  animation: landing-float 6.5s ease-in-out infinite;
+  transform-origin: center;
+}
+
+.landing__ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(16, 184, 128, 0.35);
+  animation: landing-pulse 5.5s ease-out infinite;
+}
+
+.landing__ring--a {
+  width: min(78vw, 24rem);
+  height: min(78vw, 24rem);
+}
+
+.landing__ring--b {
+  width: min(92vw, 28rem);
+  height: min(92vw, 28rem);
+  border-color: rgba(248, 250, 252, 0.12);
+  animation-delay: 1.4s;
+}
+
+.landing__copy {
+  position: relative;
+  z-index: 2;
+  max-width: 28rem;
+  display: grid;
+  gap: 0.85rem;
+  animation: landing-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.landing__brand {
+  margin: 0;
+  font-size: clamp(2.75rem, 11vw, 4.25rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: #fff;
+  text-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+}
+
+.landing__headline {
+  margin: 0;
+  font-size: clamp(1.15rem, 4.2vw, 1.45rem);
+  font-weight: 600;
+  line-height: 1.35;
+  color: rgba(248, 250, 252, 0.92);
+}
+
+.landing__lead {
+  margin: 0;
+  max-width: 22rem;
+  font-size: 0.98rem;
+  line-height: 1.7;
+  font-weight: 400;
+  color: rgba(226, 232, 240, 0.78);
+}
+
+.landing__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.55rem;
+}
+
+.landing__cta {
+  min-height: 3.1rem;
+  padding: 0 1.35rem;
+  border-radius: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font: inherit;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition:
+    transform 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.landing__cta:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.landing__cta--primary {
+  background: var(--emerald);
+  color: #042f1e;
+  box-shadow: 0 12px 28px rgba(16, 184, 128, 0.28);
+}
+
+.landing__cta--primary:hover {
+  background: #12c98c;
+}
+
+.landing__cta--ghost {
+  background: transparent;
+  color: var(--mist);
+  border: 1.5px solid rgba(248, 250, 252, 0.28);
+}
+
+.landing__cta--ghost:hover {
+  border-color: rgba(248, 250, 252, 0.55);
+  background: rgba(248, 250, 252, 0.06);
+}
+
+/* ——— Desktop: normal website ——— */
+@media (min-width: 900px) {
+  .landing {
+    background: #f8fafc;
+    color: #0f172a;
+  }
+
+  .landing__nav {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 4rem;
+    padding: 0.75rem clamp(1.5rem, 4vw, 3.5rem);
+    background: rgba(248, 250, 252, 0.9);
+    border-bottom: 1px solid #e2e8f0;
+    backdrop-filter: blur(12px);
+  }
+
+  .landing__nav-brand {
+    color: #0f172a;
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+  }
+
+  .landing__nav-links {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+
+  .landing__nav-links a {
+    min-height: 2.5rem;
+    padding: 0 1rem;
+    border-radius: 0.7rem;
+    display: inline-flex;
+    align-items: center;
+    color: #334155;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-decoration: none;
+  }
+
+  .landing__nav-cta {
+    background: #0f172a !important;
+    color: #fff !important;
+  }
+
+  .landing__stage {
+    min-height: calc(100dvh - 4rem);
+    max-width: 1120px;
+    margin-inline: auto;
+    width: 100%;
+    align-content: center;
+    grid-template-columns: 1.1fr 0.9fr;
+    align-items: center;
+    gap: 2.5rem;
+    padding: 3rem clamp(1.5rem, 4vw, 3.5rem) 4rem;
+    background:
+      radial-gradient(ellipse 60% 70% at 85% 30%, rgba(16, 184, 128, 0.18), transparent 60%),
+      radial-gradient(ellipse 50% 50% at 10% 80%, rgba(15, 23, 42, 0.06), transparent 55%),
+      linear-gradient(160deg, #0f172a 0%, #0b1220 55%, #102a24 100%);
+    border-radius: 0 0 2rem 2rem;
+    color: #f8fafc;
+    overflow: hidden;
+  }
+
+  .landing__visual {
+    position: relative;
+    inset: auto;
+    order: 2;
+    min-height: 26rem;
+  }
+
+  .landing__copy {
+    order: 1;
+    max-width: 34rem;
+  }
+
+  .landing__brand {
+    font-size: clamp(3.5rem, 6vw, 5rem);
+  }
+
+  .landing__headline {
+    font-size: 1.55rem;
+  }
+
+  .landing__lead {
+    font-size: 1.05rem;
+    max-width: 28rem;
+  }
+
+  .landing__parts {
+    width: min(100%, 24rem);
+  }
+
+  .landing__site {
+    display: block;
+    padding: 4.5rem clamp(1.5rem, 4vw, 3.5rem);
+    background: #fff;
+  }
+
+  .landing__site-inner {
+    max-width: 1120px;
+    margin-inline: auto;
+  }
+
+  .landing__site h2 {
+    margin: 0 0 0.65rem;
+    font-size: clamp(1.6rem, 2.5vw, 2.1rem);
+    letter-spacing: -0.02em;
+  }
+
+  .landing__site > .landing__site-inner > p {
+    margin: 0 0 2rem;
+    max-width: 36rem;
+    color: #64748b;
+    font-size: 1.05rem;
+    line-height: 1.7;
+  }
+
+  .landing__site ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .landing__site li {
+    display: grid;
+    gap: 0.4rem;
+    padding-block: 0.25rem;
+    border-inline-start: 3px solid #10b880;
+    padding-inline-start: 1rem;
+  }
+
+  .landing__site strong {
+    font-size: 1.05rem;
+  }
+
+  .landing__site span {
+    color: #64748b;
+    line-height: 1.6;
+    font-size: 0.95rem;
+  }
+
+  .landing__footer {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    max-width: 1120px;
+    margin-inline: auto;
+    padding: 1.75rem clamp(1.5rem, 4vw, 3.5rem) 2.5rem;
+    color: #64748b;
+    font-size: 0.9rem;
+  }
+
+  .landing__footer strong {
+    color: #0f172a;
+    font-size: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing__glow,
+  .landing__parts,
+  .landing__ring,
+  .landing__copy {
+    animation: none;
+  }
+}
+
+@keyframes landing-rise {
+  from {
+    opacity: 0;
+    transform: translateY(1.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes landing-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-0.85rem);
+  }
+}
+
+@keyframes landing-pulse {
+  0% {
+    transform: scale(0.92);
+    opacity: 0.55;
+  }
+  70% {
+    opacity: 0.15;
+  }
+  100% {
+    transform: scale(1.12);
+    opacity: 0;
+  }
+}
+
+@keyframes landing-glow {
+  from {
+    opacity: 0.7;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(4%);
+  }
+}

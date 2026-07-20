@@ -1,0 +1,65 @@
+<section class="register safe-area-page" dir="rtl">
+  <header class="register__hero">
+    <a class="register__brand" routerLink="/">قطع الغيار</a>
+    <img src="icons/icon-192x192.png" width="56" height="56" alt="" />
+    <h1>تسجيل تاجر جديد</h1>
+    <p>أنشئ حساب الجملة — سيتم مراجعة طلبك من الإدارة قبل التفعيل.</p>
+  </header>
+
+  <form class="register__form" [formGroup]="form" (ngSubmit)="submit()">
+    <label class="field">
+      <span>الاسم الكامل</span>
+      <input formControlName="fullName" type="text" autocomplete="name" placeholder="مثال: أحمد العتيبي" />
+    </label>
+
+    <label class="field">
+      <span>اسم المحل</span>
+      <input formControlName="shopName" type="text" placeholder="مثال: قطع غيار النور" />
+    </label>
+
+    <label class="field">
+      <span>رقم الجوال</span>
+      <input formControlName="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="05xxxxxxxx" />
+    </label>
+
+    <label class="field">
+      <span>المدينة</span>
+      <input formControlName="city" type="text" placeholder="الرياض" />
+    </label>
+
+    <label class="field">
+      <span>العنوان</span>
+      <textarea formControlName="address" rows="3" placeholder="الحي، الشارع، رقم المحل"></textarea>
+    </label>
+
+    <label class="field">
+      <span>كلمة المرور</span>
+      <input formControlName="password" type="password" autocomplete="new-password" placeholder="٦ أحرف على الأقل" />
+    </label>
+
+    <div class="upload">
+      <p class="upload__label">البطاقة التجارية / صورة المحل</p>
+      <label class="upload__drop">
+        <input type="file" accept="image/jpeg,image/png,image/webp" (change)="onPhotoSelected($event)" />
+        @if (previewUrl(); as url) {
+          <img [src]="url" alt="معاينة الصورة" />
+        } @else {
+          <span class="upload__hint">اضغط لرفع الصورة · JPG / PNG</span>
+        }
+      </label>
+    </div>
+
+    @if (error()) {
+      <p class="register__error" role="alert">{{ error() }}</p>
+    }
+
+    <button class="register__submit" type="submit" [disabled]="submitting()">
+      {{ submitting() ? 'جاري الإرسال…' : 'إرسال طلب التسجيل' }}
+    </button>
+
+    <p class="register__login">
+      لديك حساب؟
+      <a routerLink="/login">تسجيل الدخول</a>
+    </p>
+  </form>
+</section>

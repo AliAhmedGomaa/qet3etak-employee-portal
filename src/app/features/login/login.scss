@@ -1,0 +1,88 @@
+.login {
+  --page-pad-top: 2rem;
+  --page-pad-bottom: 2rem;
+  max-width: 24rem;
+  margin: 0 auto;
+  display: grid;
+  gap: 1rem;
+}
+
+.login h1 {
+  margin: 0;
+  text-align: center;
+}
+
+.login__back {
+  justify-self: start;
+  color: #0f172a !important;
+  font-size: 1.1rem;
+  font-weight: 800 !important;
+  letter-spacing: -0.02em;
+}
+
+.login form {
+  display: grid;
+  gap: 0.85rem;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  padding: 1.1rem;
+}
+
+.login label {
+  display: grid;
+  gap: 0.3rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.login input {
+  min-height: 3rem;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 0.75rem;
+  padding: 0.6rem 0.85rem;
+  font: inherit;
+}
+
+.login button {
+  min-height: 3rem;
+  border: 0;
+  border-radius: 0.75rem;
+  background: #0f172a;
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+}
+
+.err {
+  margin: 0;
+  color: #991b1b;
+  background: #fef2f2;
+  padding: 0.65rem 0.8rem;
+  border-radius: 0.65rem;
+  font-size: 0.85rem;
+}
+
+.login a {
+  text-align: center;
+  color: #0d9a6a;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+@media (min-width: 900px) {
+  .login {
+    max-width: 28rem;
+    --page-pad-top: 3.5rem;
+    --page-pad-bottom: 3.5rem;
+  }
+
+  .login h1 {
+    font-size: 1.75rem;
+  }
+
+  .login form {
+    padding: 1.5rem;
+    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.06);
+  }
+}

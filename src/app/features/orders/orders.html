@@ -1,0 +1,25 @@
+<section class="orders safe-area-page" dir="rtl">
+  <header>
+    <h1>طلباتي</h1>
+    <a routerLink="/home">الرئيسية</a>
+  </header>
+
+  @if (loading()) {
+    <p class="muted">جارٍ التحميل…</p>
+  } @else {
+    <div class="list">
+      @for (order of orders(); track order.id) {
+        <a class="card" [routerLink]="['/orders', order.id]">
+          <div class="top">
+            <strong>{{ order.orderNumber }}</strong>
+            <span>{{ order.total | currency: 'EGP':'symbol-narrow':'1.2-2' }}</span>
+          </div>
+          <app-order-stepper [status]="order.status" />
+          <small>{{ order.createdAt | date: 'medium' }} · {{ order.paymentMethod === 'CREDIT' ? 'آجل' : 'عند الاستلام' }}</small>
+        </a>
+      } @empty {
+        <p class="muted">لا توجد طلبات بعد.</p>
+      }
+    </div>
+  }
+</section>

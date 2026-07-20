@@ -1,0 +1,80 @@
+import { Routes } from '@angular/router';
+import {
+  guestGuard,
+  pendingScreenGuard,
+  pendingVerificationGuard,
+} from './core/auth/auth.guards';
+
+export const routes: Routes = [
+  {
+    path: '',
+    pathMatch: 'full',
+    canActivate: [guestGuard],
+    loadComponent: () =>
+      import('./features/landing/landing').then((m) => m.Landing),
+  },
+  {
+    path: 'register',
+    canActivate: [guestGuard],
+    loadComponent: () =>
+      import('./features/register/register-shop').then((m) => m.RegisterShop),
+  },
+  {
+    path: 'login',
+    canActivate: [guestGuard],
+    loadComponent: () =>
+      import('./features/login/login').then((m) => m.Login),
+  },
+  {
+    path: 'pending',
+    canActivate: [pendingScreenGuard],
+    loadComponent: () =>
+      import('./features/pending/pending-review').then((m) => m.PendingReview),
+  },
+  {
+    path: '',
+    canActivate: [pendingVerificationGuard],
+    loadComponent: () =>
+      import('./layout/shop-shell').then((m) => m.ShopShell),
+    children: [
+      {
+        path: 'home',
+        loadComponent: () =>
+          import('./features/home/home').then((m) => m.Home),
+      },
+      {
+        path: 'catalog',
+        loadComponent: () =>
+          import('./features/catalog/catalog').then((m) => m.Catalog),
+      },
+      {
+        path: 'checkout',
+        loadComponent: () =>
+          import('./features/checkout/checkout').then((m) => m.Checkout),
+      },
+      {
+        path: 'wallet',
+        loadComponent: () =>
+          import('./features/wallet/wallet').then((m) => m.WalletPage),
+      },
+      {
+        path: 'orders',
+        loadComponent: () =>
+          import('./features/orders/orders').then((m) => m.OrdersPage),
+      },
+      {
+        path: 'orders/:id',
+        loadComponent: () =>
+          import('./features/orders/order-detail').then((m) => m.OrderDetail),
+      },
+      {
+        path: 'special-requests',
+        loadComponent: () =>
+          import('./features/special-requests/special-requests').then(
+            (m) => m.SpecialRequestsPage,
+          ),
+      },
+    ],
+  },
+  { path: '**', redirectTo: '' },
+];

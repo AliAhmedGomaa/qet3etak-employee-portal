@@ -1,0 +1,210 @@
+.wallet {
+  --page-pad-bottom: 2rem;
+  max-width: 28rem;
+  margin: 0 auto;
+  background:
+    radial-gradient(ellipse at top, rgba(16, 184, 128, 0.1), transparent 50%),
+    #f8fafc;
+}
+
+.wallet__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.25rem;
+}
+
+.wallet__header h1 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.wallet__header p {
+  margin: 0.25rem 0 0;
+  color: #64748b;
+  font-size: 0.85rem;
+}
+
+.wallet__header a {
+  color: #0d9a6a;
+  font-weight: 700;
+  text-decoration: none;
+  min-height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+}
+
+.meter {
+  background: #0f172a;
+  color: #fff;
+  border-radius: 1.25rem;
+  padding: 1.25rem;
+  display: grid;
+  gap: 1.1rem;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.25);
+}
+
+.meter.sk {
+  height: 14rem;
+  background: linear-gradient(90deg, #1e293b, #334155, #1e293b);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+.meter__ring {
+  --pct: 0;
+  width: 9.5rem;
+  height: 9.5rem;
+  margin: 0 auto;
+  border-radius: 50%;
+  background: conic-gradient(
+    #10b880 calc(var(--pct) * 1%),
+    rgba(255, 255, 255, 0.12) 0
+  );
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+
+.meter__ring::before {
+  content: '';
+  position: absolute;
+  inset: 0.85rem;
+  border-radius: 50%;
+  background: #0f172a;
+}
+
+.meter__core {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.meter__core strong {
+  display: block;
+  font-size: 1.6rem;
+}
+
+.meter__core span {
+  font-size: 0.75rem;
+  color: rgba(248, 250, 252, 0.65);
+}
+
+.meter__stats {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.meter__stats div {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+}
+
+.meter__stats span {
+  color: rgba(248, 250, 252, 0.6);
+}
+
+.debt {
+  color: #fca5a5;
+}
+
+.ok {
+  color: #6ee7b7;
+}
+
+.slash {
+  margin-inline: 0.25rem;
+  font-style: normal;
+  opacity: 0.45;
+  font-weight: 500;
+}
+
+h2 {
+  margin: 1.5rem 0 0.75rem;
+  font-size: 1rem;
+}
+
+.ledger {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.ledger li {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.9rem;
+  padding: 0.85rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.ledger strong {
+  display: block;
+  font-size: 0.9rem;
+}
+
+.ledger small,
+.ledger time {
+  display: block;
+  color: #94a3b8;
+  font-size: 0.72rem;
+  margin-top: 0.15rem;
+}
+
+.amt {
+  text-align: end;
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+
+.amt small {
+  display: block;
+  font-weight: 500;
+  margin-top: 0.2rem;
+}
+
+.amt.pos {
+  color: #c2410c;
+}
+
+.amt.neg {
+  color: #0d9a6a;
+}
+
+.empty {
+  justify-content: center;
+  color: #94a3b8;
+}
+
+.err {
+  background: #fef2f2;
+  color: #991b1b;
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (min-width: 900px) {
+  .wallet {
+    max-width: 52rem;
+    background: transparent;
+  }
+
+  .wallet__header a {
+    display: none;
+  }
+
+  .wallet__header h1 {
+    font-size: 1.75rem;
+  }
+}

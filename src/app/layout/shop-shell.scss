@@ -1,0 +1,213 @@
+.shell {
+  --shell-top-h: 4rem;
+  --shell-tabs-h: 4.25rem;
+  min-height: 100dvh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+/* ——— Desktop / tablet website chrome ——— */
+.shell__top {
+  display: none;
+}
+
+.shell__main {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+}
+
+/* ——— Mobile app tab bar ——— */
+.shell__tabs {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 40;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.15rem;
+  min-height: calc(var(--shell-tabs-h) + var(--sab));
+  padding:
+    0.35rem 0.25rem
+    calc(0.35rem + var(--sab));
+  background: rgba(255, 255, 255, 0.94);
+  border-top: 1px solid #e2e8f0;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.shell__tabs a {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  min-height: 3.1rem;
+  border-radius: 0.75rem;
+  color: #64748b;
+  text-decoration: none;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.shell__tabs .ico {
+  font-size: 1.05rem;
+  line-height: 1;
+  opacity: 0.9;
+}
+
+.shell__tabs a.is-active {
+  color: #0f172a;
+  background: rgba(16, 184, 128, 0.12);
+}
+
+.shell__tabs-cart em {
+  position: absolute;
+  top: 0.2rem;
+  inset-inline-end: 18%;
+  min-width: 1.1rem;
+  height: 1.1rem;
+  padding: 0 0.25rem;
+  border-radius: 999px;
+  background: #10b880;
+  color: #042f1e;
+  font-size: 0.65rem;
+  font-style: normal;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+}
+
+/* Room for fixed tab bar on mobile pages */
+.shell__main :is(.safe-area-page) {
+  --page-pad-bottom: calc(1.25rem + var(--shell-tabs-h));
+}
+
+@media (min-width: 900px) {
+  .shell {
+    --shell-tabs-h: 0px;
+  }
+
+  .shell__top {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    min-height: var(--shell-top-h);
+    padding: 0.65rem clamp(1.25rem, 3vw, 2.5rem);
+    background: rgba(255, 255, 255, 0.92);
+    border-bottom: 1px solid #e2e8f0;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  .shell__brand {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    text-decoration: none;
+    color: inherit;
+    flex-shrink: 0;
+  }
+
+  .shell__brand img {
+    border-radius: 0.65rem;
+  }
+
+  .shell__brand strong {
+    display: block;
+    font-size: 1rem;
+    line-height: 1.2;
+  }
+
+  .shell__brand small {
+    display: block;
+    color: #64748b;
+    font-size: 0.72rem;
+  }
+
+  .shell__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    flex: 1;
+    justify-content: center;
+  }
+
+  .shell__nav a {
+    min-height: 2.5rem;
+    padding: 0 0.9rem;
+    border-radius: 0.65rem;
+    display: inline-flex;
+    align-items: center;
+    color: #475569;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .shell__nav a:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+  }
+
+  .shell__nav a.is-active {
+    background: rgba(16, 184, 128, 0.12);
+    color: #0f172a;
+  }
+
+  .shell__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    flex-shrink: 0;
+  }
+
+  .shell__cart {
+    min-height: 2.5rem;
+    padding: 0 0.95rem;
+    border-radius: 0.65rem;
+    display: inline-flex;
+    align-items: center;
+    background: #10b880;
+    color: #042f1e;
+    font-weight: 800;
+    font-size: 0.85rem;
+    text-decoration: none;
+  }
+
+  .shell__logout {
+    min-height: 2.5rem;
+    padding: 0 0.9rem;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 0.65rem;
+    background: #fff;
+    color: #0f172a;
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .shell__tabs {
+    display: none;
+  }
+
+  .shell__main {
+    width: min(1120px, 100%);
+    margin-inline: auto;
+  }
+
+  .shell__main :is(.safe-area-page) {
+    --page-pad-top: 1.75rem;
+    --page-pad-bottom: 2.5rem;
+    --page-pad-x: clamp(1.25rem, 3vw, 2rem);
+    max-width: none;
+  }
+}

@@ -1,0 +1,74 @@
+<section class="catalog safe-area-page" dir="rtl">
+  <header class="catalog__header">
+    <div>
+      <h1>كتالوج الجملة</h1>
+      <p>{{ total() }} منتج · {{ auth.user()?.shopName }}</p>
+    </div>
+    <div class="header-actions">
+      <a routerLink="/checkout" class="cart-link">السلة ({{ cart.itemCount() }})</a>
+      <a routerLink="/home" class="link">الرئيسية</a>
+    </div>
+  </header>
+
+  <form class="search" (submit)="onSearchSubmit($event)">
+    <input
+      type="search"
+      [(ngModel)]="search"
+      name="q"
+      placeholder="ابحث بالاسم، الماركة، الموديل…"
+    />
+    <button type="submit">بحث</button>
+  </form>
+
+  <div class="filters">
+    @for (row of filterRows; track row.key) {
+      <div class="filter-row">
+        <span class="filter-row__label">{{ row.label }}</span>
+        <div class="pills">
+          @for (value of facetValues(row.key); track value) {
+            <button
+              type="button"
+              class="pill"
+              [class.pill--on]="isSelected(row.key, value)"
+              (click)="toggle(row.key, value)"
+            >
+              {{ labelFor(row.key, value) }}
+            </button>
+          }
+        </div>
+      </div>
+    }
+    <button type="button" class="clear" (click)="clearFilters()">مسح الفلاتر</button>
+  </div>
+
+  @if (error()) {
+    <p class="err">{{ error() }}</p>
+  }
+
+  @if (loading()) {
+    <div class="skeletons">
+      <div class="sk"></div>
+      <div class="sk"></div>
+    </div>
+  } @else {
+    <div class="grid">
+      @for (product of products(); track product.id) {
+        <app-product-card
+          [product]="product"
+          [initialQuantity]="cartQty(product.id)"
+          (quantityChange)="onQtyChange(product, $event)"
+        />
+      } @empty {
+        <p class="empty">لا توجد منتجات مطابقة.</p>
+      }
+    </div>
+
+    @if (totalPages() > 1) {
+      <nav class="pager" aria-label="صفحات الكتالوج">
+        <button type="button" (click)="goPage(-1)" [disabled]="page() <= 1">السابق</button>
+        <span>{{ page() }} / {{ totalPages() }}</span>
+        <button type="button" (click)="goPage(1)" [disabled]="page() >= totalPages()">التالي</button>
+      </nav>
+    }
+  }
+</section>

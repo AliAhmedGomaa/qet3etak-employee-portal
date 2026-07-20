@@ -1,0 +1,56 @@
+<div class="shell" dir="rtl">
+  <header class="shell__top">
+    <a routerLink="/home" class="shell__brand">
+      <img src="icons/icon-192x192.png" width="36" height="36" alt="" />
+      <span>
+        <strong>قطع الغيار</strong>
+        <small>{{ auth.user()?.shopName }}</small>
+      </span>
+    </a>
+
+    <nav class="shell__nav" aria-label="التنقل الرئيسي">
+      <a routerLink="/home" routerLinkActive="is-active">الرئيسية</a>
+      <a routerLink="/catalog" routerLinkActive="is-active">الكتالوج</a>
+      <a routerLink="/orders" routerLinkActive="is-active">الطلبات</a>
+      <a routerLink="/wallet" routerLinkActive="is-active">المحفظة</a>
+      <a routerLink="/special-requests" routerLinkActive="is-active">قطعة نادرة</a>
+    </nav>
+
+    <div class="shell__actions">
+      <a routerLink="/checkout" class="shell__cart">{{ cartLabel() }}</a>
+      <button type="button" class="shell__logout" (click)="auth.logout()">خروج</button>
+    </div>
+  </header>
+
+  <main class="shell__main">
+    <router-outlet />
+  </main>
+
+  <nav class="shell__tabs" aria-label="تنقل التطبيق">
+    <a routerLink="/home" routerLinkActive="is-active">
+      <span class="ico" aria-hidden="true">⌂</span>
+      الرئيسية
+    </a>
+    <a routerLink="/catalog" routerLinkActive="is-active">
+      <span class="ico" aria-hidden="true">▣</span>
+      الكتالوج
+    </a>
+    <a routerLink="/checkout" routerLinkActive="is-active" class="shell__tabs-cart">
+      <span class="ico" aria-hidden="true">◎</span>
+      السلة
+      @if (cart.itemCount(); as n) {
+        @if (n > 0) {
+          <em>{{ n }}</em>
+        }
+      }
+    </a>
+    <a routerLink="/orders" routerLinkActive="is-active">
+      <span class="ico" aria-hidden="true">≡</span>
+      الطلبات
+    </a>
+    <a routerLink="/wallet" routerLinkActive="is-active">
+      <span class="ico" aria-hidden="true">◈</span>
+      المحفظة
+    </a>
+  </nav>
+</div>
