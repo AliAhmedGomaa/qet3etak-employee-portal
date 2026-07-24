@@ -8,7 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:shop-owner": "node dist/shop-owner/server/server.mjs",
-    "postbuild:netlify": "node -e \"const fs=require('fs');const p='dist/shop-owner/browser';const src=p+'/index.csr.html';const dest=p+'/index.html';if(fs.existsSync(src)){fs.copyFileSync(src,dest);console.log('Copied index.csr.html → index.html');}else{console.warn('index.csr.html missing — skip copy');}\""
+    "postbuild:vercel": "node -e \"const fs=require('fs');const p='dist/shop-owner/browser';const src=p+'/index.csr.html';const dest=p+'/index.html';if(fs.existsSync(src)){fs.copyFileSync(src,dest);console.log('Copied index.csr.html → index.html');}else{console.warn('index.csr.html missing — skip copy');}\""
   },
   "private": true,
   "packageManager": "npm@11.17.0",
@@ -31,7 +31,6 @@
     "@angular/build": "^21.2.3",
     "@angular/cli": "^21.2.3",
     "@angular/compiler-cli": "^21.2.0",
-    "@netlify/angular-runtime": "^4.0.0",
     "@types/express": "^5.0.1",
     "@types/node": "^20.17.19",
     "prettier": "^3.8.1",
