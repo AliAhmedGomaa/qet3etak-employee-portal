@@ -89,9 +89,20 @@ export class SpecialRequestsPage implements OnInit {
         this.page.set(1);
         this.reload();
       },
-      error: () => {
+      error: (err: { error?: { message?: string | string[] }; status?: number }) => {
         this.submitting.set(false);
-        this.error.set('تعذر إرسال الطلب');
+        const msg = err.error?.message;
+        if (Array.isArray(msg)) {
+          this.error.set(msg.join(' · '));
+        } else if (typeof msg === 'string' && msg.trim()) {
+          this.error.set(msg);
+        } else if (err.status === 413 || err.status === 503) {
+          this.error.set(
+            'حجم الصورة كبير جداً. اختر صورة أوضح بحجم أصغر وحاول مرة أخرى.',
+          );
+        } else {
+          this.error.set('تعذر إرسال الطلب');
+        }
       },
     });
   }
