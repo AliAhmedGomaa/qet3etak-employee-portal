@@ -1,16 +1,16 @@
 <article class="card" dir="rtl">
-  <div class="card__media">
+  <a class="card__media" [routerLink]="['/catalog', product().id]" aria-label="عرض تفاصيل المنتج">
     <img
-      [src]="product().imageUrl || 'icons/icon-512x512.png'"
+      [src]="resolveMediaUrl(product().imageUrl, 'icons/icon-512x512.png')"
       [alt]="product().title"
       loading="lazy"
     />
     <span [class]="gradeClass()">{{ gradeLabel() }}</span>
-  </div>
+  </a>
 
   <div class="card__body">
     <div class="card__top">
-      <h3>{{ product().title }}</h3>
+      <h3><a class="card__title-link" [routerLink]="['/catalog', product().id]">{{ product().title }}</a></h3>
       <p class="meta">{{ product().brand }} · {{ product().model }} · {{ product().category }}</p>
       <span [class]="stockClass()">{{ stockLabelAr() }}</span>
     </div>

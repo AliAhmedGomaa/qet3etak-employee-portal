@@ -29,14 +29,14 @@
 
     <div class="upload">
       <span>صورة القطعة / اللوحة</span>
-      <label class="drop">
-        <input type="file" accept="image/*" capture="environment" (change)="onPhoto($event)" />
-        @if (preview(); as url) {
-          <img [src]="url" alt="معاينة" />
-        } @else {
-          <em>الكاميرا أو اختيار ملف</em>
-        }
-      </label>
+      <app-file-upload
+        accept="image/*"
+        capture="environment"
+        label="الكاميرا أو اختيار ملف"
+        hint="صوّر القطعة أو ارفع صورة"
+        [resetToken]="uploadReset()"
+        (fileSelected)="onPhoto($event)"
+      />
     </div>
 
     @if (error()) {
@@ -75,4 +75,12 @@
       <p class="empty">لا توجد طلبات بعد.</p>
     }
   </div>
+
+  @if (totalPages() > 1) {
+    <nav class="pager" aria-label="صفحات الطلبات الخاصة">
+      <button type="button" (click)="goPage(-1)" [disabled]="page() <= 1">السابق</button>
+      <span>{{ page() }} / {{ totalPages() }}</span>
+      <button type="button" (click)="goPage(1)" [disabled]="page() >= totalPages()">التالي</button>
+    </nav>
+  }
 </section>

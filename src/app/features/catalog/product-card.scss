@@ -9,8 +9,19 @@
 
 .card__media {
   position: relative;
+  display: block;
   aspect-ratio: 16 / 10;
   background: #0f172a;
+  cursor: pointer;
+}
+
+.card__title-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.card__title-link:hover {
+  color: #0d9a6a;
 }
 
 .card__media img {

@@ -7,46 +7,66 @@
   </header>
 
   <form class="register__form" [formGroup]="form" (ngSubmit)="submit()">
-    <label class="field">
+    <label class="field" [class.field--invalid]="fieldError('fullName')">
       <span>الاسم الكامل</span>
       <input formControlName="fullName" type="text" autocomplete="name" placeholder="مثال: أحمد العتيبي" />
+      @if (fieldError('fullName'); as err) {
+        <em class="field__error">{{ err }}</em>
+      }
     </label>
 
-    <label class="field">
+    <label class="field" [class.field--invalid]="fieldError('shopName')">
       <span>اسم المحل</span>
       <input formControlName="shopName" type="text" placeholder="مثال: قطع غيار النور" />
+      @if (fieldError('shopName'); as err) {
+        <em class="field__error">{{ err }}</em>
+      }
     </label>
 
-    <label class="field">
+    <label class="field" [class.field--invalid]="fieldError('phone')">
       <span>رقم الجوال</span>
       <input formControlName="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="05xxxxxxxx" />
+      @if (fieldError('phone'); as err) {
+        <em class="field__error">{{ err }}</em>
+      }
     </label>
 
-    <label class="field">
+    <label class="field" [class.field--invalid]="fieldError('city')">
       <span>المدينة</span>
       <input formControlName="city" type="text" placeholder="الرياض" />
+      @if (fieldError('city'); as err) {
+        <em class="field__error">{{ err }}</em>
+      }
     </label>
 
-    <label class="field">
+    <label class="field" [class.field--invalid]="fieldError('address')">
       <span>العنوان</span>
       <textarea formControlName="address" rows="3" placeholder="الحي، الشارع، رقم المحل"></textarea>
+      @if (fieldError('address'); as err) {
+        <em class="field__error">{{ err }}</em>
+      }
     </label>
 
-    <label class="field">
+    <label class="field" [class.field--invalid]="fieldError('password')">
       <span>كلمة المرور</span>
       <input formControlName="password" type="password" autocomplete="new-password" placeholder="٦ أحرف على الأقل" />
+      @if (fieldError('password'); as err) {
+        <em class="field__error">{{ err }}</em>
+      }
     </label>
 
     <div class="upload">
       <p class="upload__label">البطاقة التجارية / صورة المحل</p>
-      <label class="upload__drop">
-        <input type="file" accept="image/jpeg,image/png,image/webp" (change)="onPhotoSelected($event)" />
-        @if (previewUrl(); as url) {
-          <img [src]="url" alt="معاينة الصورة" />
-        } @else {
-          <span class="upload__hint">اضغط لرفع الصورة · JPG / PNG</span>
-        }
-      </label>
+      <app-file-upload
+        accept="image/jpeg,image/png,image/webp"
+        label="اضغط لرفع الصورة أو اسحبها هنا"
+        hint="JPG · PNG · WEBP"
+        [invalid]="attempted() && !photoFile()"
+        (fileSelected)="onPhotoSelected($event)"
+      />
+      @if (attempted() && !photoFile()) {
+        <em class="field__error">الصورة مطلوبة</em>
+      }
     </div>
 
     @if (error()) {

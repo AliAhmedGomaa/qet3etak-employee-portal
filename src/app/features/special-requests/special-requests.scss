@@ -180,6 +180,38 @@ article small {
   color: #94a3b8;
 }
 
+.pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.25rem;
+  padding-bottom: 0.5rem;
+}
+
+.pager button {
+  min-height: 2.75rem;
+  min-width: 5rem;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 0.75rem;
+  background: #fff;
+  color: #0f172a;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pager button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.pager span {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
 @media (min-width: 900px) {
   .rare {
     max-width: 44rem;

@@ -3,6 +3,7 @@ import {
   Component,
   DestroyRef,
   OnInit,
+  afterNextRender,
   inject,
   signal,
 } from '@angular/core';
@@ -12,8 +13,14 @@ import { RouterLink } from '@angular/router';
 import { forkJoin, interval } from 'rxjs';
 import { AuthService } from '../../core/auth/auth.service';
 import { CatalogService } from '../../core/catalog/catalog.service';
-import { CatalogProduct } from '../../core/catalog/catalog.models';
+import {
+  CatalogBrand,
+  CatalogCategory,
+  CatalogProduct,
+} from '../../core/catalog/catalog.models';
 import { PushNotificationService } from '../../core/push/push-notification.service';
+import { resolveMediaUrl } from '../../core/media/media-url';
+import { environment } from '../../../environments/environment';
 
 type HeroSlide = {
   id: string;
@@ -39,9 +46,10 @@ export class Home implements OnInit {
   protected readonly auth = inject(AuthService);
   protected readonly push = inject(PushNotificationService);
 
+  protected readonly error = signal<string | null>(null);
   protected readonly loading = signal(true);
-  protected readonly brands = signal<string[]>([]);
-  protected readonly categories = signal<string[]>([]);
+  protected readonly brands = signal<CatalogBrand[]>([]);
+  protected readonly categories = signal<CatalogCategory[]>([]);
   protected readonly featured = signal<CatalogProduct[]>([]);
   protected readonly heroIndex = signal(0);
 
@@ -82,23 +90,33 @@ export class Home implements OnInit {
     { label: 'قطعة نادرة', link: '/special-requests', tone: 'ghost' },
   ] as const;
 
+  constructor() {
+    // Auto-rotate the hero carousel — browser only, so the running timer
+    // never blocks server-side render from reaching stability.
+    afterNextRender(() => {
+      interval(5200)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(() => this.nextHero());
+    });
+  }
+
   ngOnInit(): void {
     forkJoin({
-      facets: this.catalogApi.facets({}),
+      brands: this.catalogApi.brands({ page: 1, limit: 100 }),
+      categories: this.catalogApi.categories({ page: 1, limit: 100 }),
       products: this.catalogApi.search({ page: 1, limit: 12 }),
     }).subscribe({
-      next: ({ facets, products }) => {
-        this.brands.set(facets.brand ?? []);
-        this.categories.set(facets.category ?? []);
+      next: ({ brands, categories, products }) => {
+        this.brands.set(brands.items ?? []);
+        this.categories.set(categories.items ?? []);
         this.featured.set(products.items ?? []);
         this.loading.set(false);
       },
-      error: () => this.loading.set(false),
+      error: () => {
+        this.loading.set(false);
+        this.error.set('تعذر الاتصال بالخادم. حاول مرة أخرى.');
+      },
     });
-
-    interval(5200)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.nextHero());
   }
 
   protected nextHero(): void {
@@ -119,9 +137,21 @@ export class Home implements OnInit {
     return (brand.trim().charAt(0) || '?').toUpperCase();
   }
 
+  protected brandIcon(brand: CatalogBrand): string {
+    const url = brand.iconUrl?.trim() ?? '';
+    if (!url) return '';
+    if (url.startsWith('http') || url.startsWith('data:')) return url;
+    if (url.startsWith('/')) return `${environment.apiUrl}${url}`;
+    return url;
+  }
+
+  protected productImage(url?: string): string {
+    return resolveMediaUrl(url, 'icons/icon-192x192.png');
+  }
+
   protected stockLabel(p: CatalogProduct): string {
     if (p.stockQuantity <= 0) return 'غير متوفر';
     if (p.stockQuantity <= 5) return `متبقي ${p.stockQuantity}`;
-    return 'متوفر';
+    return `متوفر · ${p.stockQuantity}`;
   }
 }

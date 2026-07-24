@@ -48,6 +48,13 @@ export const routes: Routes = [
           import('./features/catalog/catalog').then((m) => m.Catalog),
       },
       {
+        path: 'catalog/:id',
+        loadComponent: () =>
+          import('./features/catalog/product-detail').then(
+            (m) => m.ProductDetail,
+          ),
+      },
+      {
         path: 'checkout',
         loadComponent: () =>
           import('./features/checkout/checkout').then((m) => m.Checkout),
@@ -73,6 +80,11 @@ export const routes: Routes = [
           import('./features/special-requests/special-requests').then(
             (m) => m.SpecialRequestsPage,
           ),
+      },
+      {
+        path: 'support',
+        loadComponent: () =>
+          import('./features/support/support-chat').then((m) => m.SupportChat),
       },
     ],
   },

@@ -12,17 +12,36 @@
     </button>
 
     <div class="install-banner__icon" aria-hidden="true">
-      <img src="icons/icon-192x192.png" width="48" height="48" alt="" />
+      <img src="/icons/icon-192x192.png" width="48" height="48" alt="" />
     </div>
 
     <div class="install-banner__body">
       <h2 id="install-banner-title" class="install-banner__title">ثبّت التطبيق على الشاشة الرئيسية</h2>
-      <p class="install-banner__subtitle">وصول أسرع للكتالوج والمخزون — حتى بدون فتح المتصفح.</p>
+      <p class="install-banner__subtitle">يعمل كتطبيق مستقل بدون شريط المتصفح — أسرع للكتالوج والطلبات والدعم.</p>
 
-      @if (pwa.platform() === 'android-chrome') {
-        <button type="button" class="install-banner__cta" (click)="onInstallClick()">
-          تثبيت التطبيق
-        </button>
+      @if (pwa.platform() === 'android') {
+        @if (pwa.canNativeInstall()) {
+          <button type="button" class="install-banner__cta" (click)="onInstallClick()">
+            تثبيت التطبيق
+          </button>
+        } @else {
+          <ol class="install-banner__ios-steps">
+            <li>
+              افتح قائمة المتصفح
+              <strong>⋮</strong>
+              (أعلى اليسار أو اليمين)
+            </li>
+            <li>
+              اختر
+              <strong>تثبيت التطبيق</strong>
+              أو
+              <strong>إضافة إلى الشاشة الرئيسية</strong>
+            </li>
+            <li>
+              لا تستخدم وضع التصفح المتخفي — التثبيت لا يعمل فيه
+            </li>
+          </ol>
+        }
       }
 
       @if (pwa.platform() === 'ios-safari') {

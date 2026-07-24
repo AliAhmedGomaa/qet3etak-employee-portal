@@ -15,18 +15,21 @@ export class PwaInstallService {
 
   readonly platform = signal<InstallPlatform>('unsupported');
 
-  /** Banner should render when installable and not dismissed / already installed. */
+  /**
+   * Show the banner on Android even before `beforeinstallprompt` fires, with
+   * manual “Install app / Add to Home screen” steps as a fallback. Chrome only
+   * fires the native prompt after the service worker is controlling the page.
+   */
   readonly shouldShowBanner = computed(() => {
     if (!isPlatformBrowser(this.platformId)) return false;
     if (this.dismissed() || this.installed()) return false;
     const p = this.platform();
     if (p === 'installed' || p === 'unsupported') return false;
-    if (p === 'android-chrome') return this.deferredPrompt() !== null;
-    return p === 'ios-safari';
+    return p === 'android' || p === 'ios-safari';
   });
 
   readonly canNativeInstall = computed(
-    () => this.platform() === 'android-chrome' && this.deferredPrompt() !== null,
+    () => this.platform() === 'android' && this.deferredPrompt() !== null,
   );
 
   init(): void {
@@ -50,7 +53,7 @@ export class PwaInstallService {
     window.removeEventListener('appinstalled', this.onAppInstalled);
   }
 
-  /** Triggers the native Chrome install sheet (must be called from a user gesture). */
+  /** Triggers the native Chrome/Samsung install sheet (must be from a user gesture). */
   async promptInstall(): Promise<'accepted' | 'dismissed' | 'unavailable'> {
     const event = this.deferredPrompt();
     if (!event) return 'unavailable';
@@ -82,7 +85,7 @@ export class PwaInstallService {
     event.preventDefault();
     this.deferredPrompt.set(event as BeforeInstallPromptEvent);
     if (this.platform() === 'unsupported') {
-      this.platform.set('android-chrome');
+      this.platform.set('android');
     }
   };
 
@@ -105,16 +108,17 @@ export class PwaInstallService {
 
     if (isIos && isSafari) return 'ios-safari';
 
-    const isAndroid = /Android/i.test(ua);
-    const isChrome = /Chrome/i.test(ua) && !/Edg|OPR|SamsungBrowser/i.test(ua);
-    if (isAndroid && isChrome) return 'android-chrome';
+    // Android: Chrome, Samsung Internet, Edge, Opera, Brave, etc.
+    // All Chromium forks can install PWAs; Samsung is very common.
+    if (/Android/i.test(ua)) return 'android';
 
     return 'unsupported';
   }
 
   private isStandalone(): boolean {
     const media = window.matchMedia('(display-mode: standalone)').matches;
-    const iosStandalone = (navigator as Navigator & { standalone?: boolean }).standalone === true;
+    const iosStandalone =
+      (navigator as Navigator & { standalone?: boolean }).standalone === true;
     const twa = document.referrer.startsWith('android-app://');
     return media || iosStandalone || twa;
   }

@@ -1,4 +1,8 @@
-export type InstallPlatform = 'android-chrome' | 'ios-safari' | 'unsupported' | 'installed';
+export type InstallPlatform =
+  | 'android'
+  | 'ios-safari'
+  | 'unsupported'
+  | 'installed';
 
 /** Chromium `beforeinstallprompt` event (not in standard DOM typings). */
 export interface BeforeInstallPromptEvent extends Event {

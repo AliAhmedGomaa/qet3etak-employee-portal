@@ -3,5 +3,5 @@ export const environment = {
   apiUrl: 'http://localhost:3000',
   whatsappSupport: '966500000000',
   vapidPublicKey:
-    'BEwvGrmoRuZIbIxZDO1OD-3lSkn6TSdypiYIeEVfZmdQMTToHcygs8hUJWFonzbnueUmcuLIgYRbecoVg7EvcQw',
+    'BIpdBhQLp8xD2XZy5-o76hlYfi1EhcT346-Dc9g_5RSbDDHDvfjH6heXTS58P8xqchz79ZxYctdUIUQgMqkCNX0',
 };

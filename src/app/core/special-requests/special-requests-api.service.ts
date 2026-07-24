@@ -1,7 +1,8 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { PageParams, Paginated } from '../pagination';
 
 export type SpecialRequestStatus = 'PENDING' | 'QUOTED' | 'FULFILLED';
 
@@ -24,8 +25,13 @@ export class SpecialRequestsApi {
   private readonly http = inject(HttpClient);
   private readonly base = `${environment.apiUrl}/wholesale/special-requests`;
 
-  list(): Observable<SpecialRequest[]> {
-    return this.http.get<SpecialRequest[]>(this.base);
+  list(params: PageParams = {}): Observable<Paginated<SpecialRequest>> {
+    let httpParams = new HttpParams();
+    if (params.page) httpParams = httpParams.set('page', String(params.page));
+    if (params.limit) httpParams = httpParams.set('limit', String(params.limit));
+    return this.http.get<Paginated<SpecialRequest>>(this.base, {
+      params: httpParams,
+    });
   }
 
   create(form: FormData): Observable<SpecialRequest> {

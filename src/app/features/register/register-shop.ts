@@ -5,16 +5,18 @@ import {
   signal,
 } from '@angular/core';
 import {
+  AbstractControl,
   FormBuilder,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/auth/auth.service';
+import { FileUpload } from '../../shared/file-upload/file-upload';
 
 @Component({
   selector: 'app-register-shop',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, FileUpload],
   templateUrl: './register-shop.html',
   styleUrl: './register-shop.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,8 +28,8 @@ export class RegisterShop {
 
   protected readonly submitting = signal(false);
   protected readonly error = signal<string | null>(null);
-  protected readonly previewUrl = signal<string | null>(null);
   protected readonly photoFile = signal<File | null>(null);
+  protected readonly attempted = signal(false);
 
   protected readonly form = this.fb.nonNullable.group({
     fullName: ['', [Validators.required, Validators.minLength(2)]],
@@ -38,22 +40,38 @@ export class RegisterShop {
     password: ['', [Validators.required, Validators.minLength(6)]],
   });
 
-  protected onPhotoSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const file = input.files?.[0] ?? null;
-    if (!file) return;
-    if (!file.type.startsWith('image/')) {
+  protected fieldError(name: keyof typeof this.form.controls): string | null {
+    if (!this.attempted() && !this.form.controls[name].touched) return null;
+    const control = this.form.controls[name];
+    if (control.valid) return null;
+    if (control.hasError('required')) return 'هذا الحقل مطلوب';
+    if (control.hasError('minlength')) {
+      const min = control.getError('minlength')?.requiredLength as number;
+      return `يجب إدخال ${min} أحرف على الأقل`;
+    }
+    if (control.hasError('pattern')) return 'رقم الجوال غير صالح';
+    return 'قيمة غير صالحة';
+  }
+
+  protected onPhotoSelected(file: File | null): void {
+    if (file && !file.type.startsWith('image/')) {
       this.error.set('يرجى اختيار صورة فقط (JPG / PNG / WEBP)');
       return;
     }
     this.photoFile.set(file);
-    this.previewUrl.set(URL.createObjectURL(file));
     this.error.set(null);
   }
 
   protected submit(): void {
+    this.attempted.set(true);
+    this.normalizePhone();
     this.form.markAllAsTouched();
-    if (this.form.invalid) return;
+
+    if (this.form.invalid) {
+      this.error.set('أكمل الحقول المطلوبة بشكل صحيح قبل الإرسال');
+      this.focusFirstInvalid();
+      return;
+    }
     if (!this.photoFile()) {
       this.error.set('صورة البطاقة التجارية / المحل مطلوبة');
       return;
@@ -64,7 +82,7 @@ export class RegisterShop {
 
     const value = this.form.getRawValue();
     const data = new FormData();
-    Object.entries(value).forEach(([key, val]) => data.append(key, val));
+    Object.entries(value).forEach(([key, val]) => data.append(key, String(val).trim()));
     data.append('commercialRegPhoto', this.photoFile()!);
 
     this.auth.registerShop(data).subscribe({
@@ -72,15 +90,51 @@ export class RegisterShop {
         this.submitting.set(false);
         void this.router.navigateByUrl('/pending');
       },
-      error: (err: { error?: { message?: string | string[] } }) => {
+      error: (err: { error?: { message?: string | string[] }; status?: number }) => {
         this.submitting.set(false);
         const msg = err.error?.message;
         this.error.set(
           Array.isArray(msg)
             ? msg.join(' · ')
-            : msg || 'تعذر إكمال التسجيل. حاول مرة أخرى.',
+            : msg ||
+                (err.status === 0
+                  ? 'تعذر الاتصال بالخادم. تأكد أن الـ API يعمل.'
+                  : 'تعذر إكمال التسجيل. حاول مرة أخرى.'),
         );
       },
     });
+  }
+
+  /** Convert Arabic-Indic digits and trim so validation/API accept the phone. */
+  private normalizePhone(): void {
+    const raw = this.form.controls.phone.value ?? '';
+    const normalized = raw
+      .replace(/[٠-٩]/g, (d) => String(d.charCodeAt(0) - 0x0660))
+      .replace(/[۰-۹]/g, (d) => String(d.charCodeAt(0) - 0x06f0))
+      .trim();
+    if (normalized !== raw) {
+      this.form.controls.phone.setValue(normalized);
+    }
+  }
+
+  private focusFirstInvalid(): void {
+    const order: Array<keyof typeof this.form.controls> = [
+      'fullName',
+      'shopName',
+      'phone',
+      'city',
+      'address',
+      'password',
+    ];
+    for (const name of order) {
+      const control = this.form.controls[name] as AbstractControl;
+      if (control.invalid) {
+        const el = document.querySelector<HTMLElement>(
+          `[formControlName="${name}"]`,
+        );
+        el?.focus();
+        return;
+      }
+    }
   }
 }

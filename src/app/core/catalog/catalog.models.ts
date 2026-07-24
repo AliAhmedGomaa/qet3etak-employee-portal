@@ -18,6 +18,7 @@ export interface CatalogProduct {
   brand: string;
   model: string;
   category: string;
+  part?: string;
   qualityGrade: QualityGrade;
   stockQuantity: number;
   basePrice: number;
@@ -36,10 +37,27 @@ export interface CatalogResponse {
   totalPages: number;
 }
 
+export interface CatalogBrand {
+  id: string;
+  name: string;
+  iconUrl: string;
+  isActive: boolean;
+  sortOrder: number;
+}
+
+export interface CatalogCategory {
+  id: string;
+  name: string;
+  iconUrl: string;
+  isActive: boolean;
+  sortOrder: number;
+}
+
 export interface CatalogFacets {
   brand: string[];
   model: string[];
   category: string[];
+  part: string[];
   qualityGrade: string[];
 }
 

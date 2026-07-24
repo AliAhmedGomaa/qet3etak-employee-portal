@@ -22,11 +22,20 @@ export class WalletPage implements OnInit {
   protected readonly wallet = signal<WalletView | null>(null);
   protected readonly loading = signal(true);
   protected readonly error = signal<string | null>(null);
+  protected readonly page = signal(1);
+  protected readonly totalPages = signal(1);
 
   ngOnInit(): void {
-    this.api.wallet().subscribe({
+    this.load();
+  }
+
+  protected load(): void {
+    this.loading.set(true);
+    this.api.wallet({ page: this.page(), limit: 20 }).subscribe({
       next: (w) => {
         this.wallet.set(w);
+        this.page.set(w.transactionsMeta?.page ?? 1);
+        this.totalPages.set(w.transactionsMeta?.totalPages ?? 1);
         this.loading.set(false);
       },
       error: () => {
@@ -34,6 +43,16 @@ export class WalletPage implements OnInit {
         this.error.set('تعذر تحميل المحفظة');
       },
     });
+  }
+
+  protected goPage(delta: number): void {
+    const next = Math.min(
+      this.totalPages(),
+      Math.max(1, this.page() + delta),
+    );
+    if (next === this.page()) return;
+    this.page.set(next);
+    this.load();
   }
 
   protected txLabel(type: string): string {

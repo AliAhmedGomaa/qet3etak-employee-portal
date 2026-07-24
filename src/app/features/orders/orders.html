@@ -21,5 +21,13 @@
         <p class="muted">لا توجد طلبات بعد.</p>
       }
     </div>
+
+    @if (totalPages() > 1) {
+      <nav class="pager" aria-label="صفحات الطلبات">
+        <button type="button" (click)="goPage(-1)" [disabled]="page() <= 1">السابق</button>
+        <span>{{ page() }} / {{ totalPages() }}</span>
+        <button type="button" (click)="goPage(1)" [disabled]="page() >= totalPages()">التالي</button>
+      </nav>
+    }
   }
 </section>

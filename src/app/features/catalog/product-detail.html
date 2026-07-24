@@ -1,0 +1,89 @@
+<section class="detail safe-area-page" dir="rtl">
+  <div class="detail__topbar">
+    <a routerLink="/catalog" class="back">← الكتالوج</a>
+    <a routerLink="/checkout" class="cart-link">السلة ({{ cart.itemCount() }})</a>
+  </div>
+
+  @if (loading()) {
+    <div class="detail__skeleton">
+      <div class="sk sk--media"></div>
+      <div class="sk sk--body"></div>
+    </div>
+  } @else if (error()) {
+    <p class="err">{{ error() }}</p>
+  } @else if (product(); as p) {
+    <div class="detail__grid">
+      <div class="media">
+        <img
+          [src]="resolveMediaUrl(p.imageUrl, 'icons/icon-512x512.png')"
+          [alt]="p.title"
+        />
+        <span class="grade">{{ gradeLabel() }}</span>
+      </div>
+
+      <div class="info">
+        <h1>{{ p.title }}</h1>
+        <p class="meta">{{ p.brand }} · {{ p.model }} · {{ p.category }}</p>
+        @if (p.part) {
+          <p class="part">القطعة: {{ p.part }}</p>
+        }
+        @if (p.sku) {
+          <p class="sku">كود: {{ p.sku }}</p>
+        }
+        <span [class]="stockClass()">{{ stockLabelAr() }}</span>
+
+        <div class="price-box">
+          <div class="price-box__unit">
+            <span class="unit">{{ pricing().unitPrice | currency: 'EGP':'symbol-narrow':'1.2-2' }}</span>
+            <span class="per"> / وحدة</span>
+            @if (pricing().isTiered) {
+              <span class="tier-tag">خصم جملة</span>
+            }
+          </div>
+          <div class="price-box__total">
+            <span>الإجمالي</span>
+            <strong>{{ pricing().lineTotal | currency: 'EGP':'symbol-narrow':'1.2-2' }}</strong>
+          </div>
+        </div>
+
+        <div class="actions">
+          <div class="qty" [class.qty--disabled]="p.stockQuantity <= 0">
+            <button type="button" class="qty__btn" (click)="dec()" [disabled]="qty() <= 1 || p.stockQuantity <= 0" aria-label="إنقاص">−</button>
+            <span class="qty__value">{{ qty() }}</span>
+            <button type="button" class="qty__btn" (click)="inc()" [disabled]="p.stockQuantity <= 0 || qty() >= p.stockQuantity" aria-label="زيادة">+</button>
+          </div>
+          <button
+            type="button"
+            class="add"
+            (click)="addToCart()"
+            [disabled]="p.stockQuantity <= 0"
+          >
+            {{ p.stockQuantity <= 0 ? 'غير متوفر' : (added() ? 'تم التحديث ✓' : 'أضف إلى السلة') }}
+          </button>
+        </div>
+
+        @if (p.discountMatrix.length) {
+          <div class="tiers">
+            <h2>أسعار الجملة</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>الكمية</th>
+                  <th>السعر</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (row of p.discountMatrix; track row.label) {
+                  <tr [class.active]="qty() >= row.minQty && (row.maxQty == null || qty() <= row.maxQty)">
+                    <td>{{ row.label }}</td>
+                    <td>{{ row.price | currency: 'EGP':'symbol-narrow':'1.2-2' }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</section>

@@ -89,6 +89,24 @@
   box-shadow: 0 0 0 3px rgba(16, 184, 128, 0.25);
 }
 
+.field--invalid input,
+.field--invalid textarea {
+  border-color: #f87171;
+  background: #fff7f7;
+}
+
+.field__error {
+  margin: 0;
+  font-size: 0.78rem;
+  font-style: normal;
+  color: #b91c1c;
+}
+
+.upload--invalid .upload__drop {
+  border-color: #f87171;
+  background: #fff7f7;
+}
+
 .upload__label {
   margin: 0 0 0.4rem;
   font-size: 0.8rem;

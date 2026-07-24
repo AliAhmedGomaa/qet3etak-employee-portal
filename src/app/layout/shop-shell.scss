@@ -65,7 +65,8 @@
   background: rgba(16, 184, 128, 0.12);
 }
 
-.shell__tabs-cart em {
+.shell__tabs-cart em,
+.shell__tabs-chat em {
   position: absolute;
   top: 0.2rem;
   inset-inline-end: 18%;
@@ -160,6 +161,24 @@
   .shell__nav a.is-active {
     background: rgba(16, 184, 128, 0.12);
     color: #0f172a;
+  }
+
+  .shell__chat-link {
+    gap: 0.35rem;
+  }
+
+  .shell__chat-link .badge {
+    min-width: 1.15rem;
+    height: 1.15rem;
+    padding: 0 0.3rem;
+    border-radius: 999px;
+    background: #ef4444;
+    color: #fff;
+    font-size: 0.68rem;
+    font-style: normal;
+    font-weight: 800;
+    display: inline-grid;
+    place-items: center;
   }
 
   .shell__actions {

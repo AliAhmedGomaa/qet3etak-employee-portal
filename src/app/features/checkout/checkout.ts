@@ -16,6 +16,7 @@ import {
   PaymentMethod,
   WalletView,
 } from '../../core/orders/orders-api.service';
+import { resolveMediaUrl } from '../../core/media/media-url';
 
 @Component({
   selector: 'app-checkout',
@@ -36,6 +37,7 @@ export class Checkout implements OnInit {
   protected readonly submitting = signal(false);
   protected readonly error = signal<string | null>(null);
   protected notes = '';
+  protected readonly resolveMediaUrl = resolveMediaUrl;
 
   protected readonly creditExceeded = computed(() => {
     const w = this.wallet();

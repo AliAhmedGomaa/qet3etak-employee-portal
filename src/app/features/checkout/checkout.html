@@ -13,7 +13,7 @@
     <ul class="lines">
       @for (line of lines(); track line.productId) {
         <li>
-          <img [src]="line.imageUrl || 'icons/icon-192x192.png'" [alt]="line.title" width="52" height="52" />
+          <img [src]="resolveMediaUrl(line.imageUrl, 'icons/icon-192x192.png')" [alt]="line.title" width="52" height="52" />
           <div class="info">
             <strong>{{ line.title }}</strong>
             <span>{{ unitPrice(line.basePrice, line.quantity, line.tieredPricing) | currency: 'EGP':'symbol-narrow':'1.2-2' }} × {{ line.quantity }}</span>

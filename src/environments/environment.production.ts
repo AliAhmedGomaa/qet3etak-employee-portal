@@ -1,8 +1,8 @@
 export const environment = {
   production: true,
-  // Overridden at Netlify build via scripts/set-api-url.mjs when API_URL is set
+  // Render web service (update if your Render URL differs)
   apiUrl: 'https://qet3etak-api.onrender.com',
   whatsappSupport: '201000000000',
   vapidPublicKey:
-    'BEwvGrmoRuZIbIxZDO1OD-3lSkn6TSdypiYIeEVfZmdQMTToHcygs8hUJWFonzbnueUmcuLIgYRbecoVg7EvcQw',
+    'BIpdBhQLp8xD2XZy5-o76hlYfi1EhcT346-Dc9g_5RSbDDHDvfjH6heXTS58P8xqchz79ZxYctdUIUQgMqkCNX0',
 };

@@ -14,6 +14,14 @@
       <a routerLink="/orders" routerLinkActive="is-active">الطلبات</a>
       <a routerLink="/wallet" routerLinkActive="is-active">المحفظة</a>
       <a routerLink="/special-requests" routerLinkActive="is-active">قطعة نادرة</a>
+      <a routerLink="/support" routerLinkActive="is-active" class="shell__chat-link">
+        الدعم
+        @if (chat.unread(); as u) {
+          @if (u > 0) {
+            <em class="badge">{{ u }}</em>
+          }
+        }
+      </a>
     </nav>
 
     <div class="shell__actions">
@@ -51,6 +59,15 @@
     <a routerLink="/wallet" routerLinkActive="is-active">
       <span class="ico" aria-hidden="true">◈</span>
       المحفظة
+    </a>
+    <a routerLink="/support" routerLinkActive="is-active" class="shell__tabs-chat">
+      <span class="ico" aria-hidden="true">💬</span>
+      الدعم
+      @if (chat.unread(); as u) {
+        @if (u > 0) {
+          <em>{{ u }}</em>
+        }
+      }
     </a>
   </nav>
 </div>

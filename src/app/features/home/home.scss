@@ -42,6 +42,16 @@
   text-decoration: none;
 }
 
+.home__error {
+  margin: 0;
+  padding: 0.85rem 1rem;
+  border-radius: 0.85rem;
+  background: #fef2f2;
+  color: #991b1b;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
 /* ——— Hero carousel ——— */
 .hero {
   position: relative;
@@ -243,6 +253,19 @@
   font-size: 1.25rem;
   font-weight: 800;
   box-shadow: 0 10px 24px rgba(15, 23, 42, 0.16);
+  overflow: hidden;
+}
+
+.brand__mark--img {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  padding: 0.45rem;
+}
+
+.brand__mark--img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .brand strong {

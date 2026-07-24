@@ -7,6 +7,10 @@
     <a routerLink="/catalog" class="home__welcome-cta">كل المنتجات</a>
   </div>
 
+  @if (error()) {
+    <p class="home__error" role="alert">{{ error() }}</p>
+  }
+
   <section class="hero" aria-roledescription="carousel" aria-label="عروض رئيسية">
     <div class="hero__viewport">
       @for (slide of slides; track slide.id; let i = $index) {
@@ -54,10 +58,20 @@
       </div>
     } @else {
       <div class="carousel brands" tabindex="0">
-        @for (brand of brands(); track brand) {
-          <a class="brand" [routerLink]="['/catalog']" [queryParams]="{ brand }">
-            <span class="brand__mark">{{ brandInitial(brand) }}</span>
-            <strong>{{ brand }}</strong>
+        @for (brand of brands(); track brand.id) {
+          <a
+            class="brand"
+            [routerLink]="['/catalog']"
+            [queryParams]="{ brand: brand.name }"
+          >
+            @if (brandIcon(brand); as icon) {
+              <span class="brand__mark brand__mark--img">
+                <img [src]="icon" [alt]="brand.name" />
+              </span>
+            } @else {
+              <span class="brand__mark">{{ brandInitial(brand.name) }}</span>
+            }
+            <strong>{{ brand.name }}</strong>
           </a>
         } @empty {
           <p class="empty">لا توجد ماركات بعد.</p>
@@ -71,8 +85,12 @@
       <h2>الفئات</h2>
     </header>
     <div class="carousel cats">
-      @for (cat of categories(); track cat) {
-        <a class="cat" [routerLink]="['/catalog']" [queryParams]="{ category: cat }">{{ cat }}</a>
+      @for (cat of categories(); track cat.id) {
+        <a
+          class="cat"
+          [routerLink]="['/catalog']"
+          [queryParams]="{ category: cat.name }"
+        >{{ cat.name }}</a>
       }
       <a class="cat cat--accent" routerLink="/special-requests">طلب نادرة</a>
     </div>
@@ -92,7 +110,7 @@
       <div class="carousel products">
         @for (p of featured(); track p.id) {
           <a class="product" [routerLink]="['/catalog']" [queryParams]="{ brand: p.brand }">
-            <img [src]="p.imageUrl || 'icons/icon-192x192.png'" [alt]="p.title" loading="lazy" />
+            <img [src]="productImage(p.imageUrl)" [alt]="p.title" loading="lazy" />
             <div class="product__body">
               <strong>{{ p.title }}</strong>
               <small>{{ p.brand }} · {{ p.model }}</small>

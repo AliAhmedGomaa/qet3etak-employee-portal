@@ -8,11 +8,13 @@ import {
   signal,
 } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { CatalogProduct, resolveUnitPrice } from '../../core/catalog/catalog.models';
+import { resolveMediaUrl } from '../../core/media/media-url';
 
 @Component({
   selector: 'app-product-card',
-  imports: [CurrencyPipe],
+  imports: [CurrencyPipe, RouterLink],
   templateUrl: './product-card.html',
   styleUrl: './product-card.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -29,6 +31,7 @@ export class ProductCard {
 
   protected readonly qty = signal(1);
   protected readonly matrixOpen = signal(false);
+  protected readonly resolveMediaUrl = resolveMediaUrl;
 
   constructor() {
     effect(() => {
@@ -68,7 +71,7 @@ export class ProductCard {
     const stock = this.product().stockQuantity;
     if (stock <= 0) return 'غير متوفر';
     if (stock <= 5) return `متبقي ${stock} فقط`;
-    return 'متوفر';
+    return `متوفر · ${stock} قطعة`;
   });
 
   protected readonly gradeClass = computed(() => {

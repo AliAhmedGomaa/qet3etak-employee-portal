@@ -9,14 +9,11 @@ const ENABLED_KEY = 'qet3etak.push.enabled';
 @Injectable({ providedIn: 'root' })
 export class PushNotificationService {
   private readonly http = inject(HttpClient);
-  private readonly swPush = inject(SwPush);
+  /** Optional — only available when `provideServiceWorker` is registered. */
+  private readonly swPush = inject(SwPush, { optional: true });
 
   readonly enabled = signal(this.readEnabled());
-  readonly supported = signal(
-    typeof window !== 'undefined' &&
-      'Notification' in window &&
-      'serviceWorker' in navigator,
-  );
+  readonly supported = signal(this.isPushSupported());
   readonly busy = signal(false);
   readonly lastError = signal<string | null>(null);
 
@@ -24,6 +21,11 @@ export class PushNotificationService {
     this.busy.set(true);
     this.lastError.set(null);
     try {
+      if (!this.swPush) {
+        this.lastError.set('خدمة الإشعارات غير مهيأة في التطبيق');
+        return false;
+      }
+
       if (!this.swPush.isEnabled) {
         this.lastError.set(
           'Service Worker غير مفعّل (استخدم نسخة الإنتاج / HTTPS)',
@@ -67,6 +69,12 @@ export class PushNotificationService {
   }
 
   async disable(): Promise<void> {
+    if (!this.swPush) {
+      this.enabled.set(false);
+      localStorage.removeItem(ENABLED_KEY);
+      return;
+    }
+
     this.busy.set(true);
     try {
       const sub = await firstValueFrom(this.swPush.subscription);
@@ -88,6 +96,15 @@ export class PushNotificationService {
   async toggle(): Promise<void> {
     if (this.enabled()) await this.disable();
     else await this.enable();
+  }
+
+  private isPushSupported(): boolean {
+    return (
+      typeof window !== 'undefined' &&
+      'Notification' in window &&
+      'serviceWorker' in navigator &&
+      this.swPush != null
+    );
   }
 
   private readEnabled(): boolean {

@@ -1,7 +1,8 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { PageParams, Paginated } from '../pagination';
 
 export type PaymentMethod = 'CREDIT' | 'CASH_ON_DELIVERY';
 export type OrderStatus = 'RECEIVED' | 'PREPARING' | 'SHIPPED' | 'DELIVERED';
@@ -24,6 +25,12 @@ export interface WalletView {
   availableCredit: number;
   utilization: number;
   transactions: WalletTx[];
+  transactionsMeta?: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
 }
 
 export interface ShopOrder {
@@ -47,8 +54,13 @@ export class OrdersApiService {
   private readonly http = inject(HttpClient);
   private readonly api = environment.apiUrl;
 
-  wallet(): Observable<WalletView> {
-    return this.http.get<WalletView>(`${this.api}/wholesale/wallet`);
+  wallet(params: PageParams = {}): Observable<WalletView> {
+    let httpParams = new HttpParams();
+    if (params.page) httpParams = httpParams.set('page', String(params.page));
+    if (params.limit) httpParams = httpParams.set('limit', String(params.limit));
+    return this.http.get<WalletView>(`${this.api}/wholesale/wallet`, {
+      params: httpParams,
+    });
   }
 
   checkout(body: {
@@ -59,8 +71,13 @@ export class OrdersApiService {
     return this.http.post<ShopOrder>(`${this.api}/wholesale/orders/checkout`, body);
   }
 
-  myOrders(): Observable<ShopOrder[]> {
-    return this.http.get<ShopOrder[]>(`${this.api}/wholesale/orders`);
+  myOrders(params: PageParams = {}): Observable<Paginated<ShopOrder>> {
+    let httpParams = new HttpParams();
+    if (params.page) httpParams = httpParams.set('page', String(params.page));
+    if (params.limit) httpParams = httpParams.set('limit', String(params.limit));
+    return this.http.get<Paginated<ShopOrder>>(`${this.api}/wholesale/orders`, {
+      params: httpParams,
+    });
   }
 
   myOrder(id: string): Observable<ShopOrder> {

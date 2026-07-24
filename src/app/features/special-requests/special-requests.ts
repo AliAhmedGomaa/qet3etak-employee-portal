@@ -16,10 +16,11 @@ import {
   SpecialRequest,
   SpecialRequestsApi,
 } from '../../core/special-requests/special-requests-api.service';
+import { FileUpload } from '../../shared/file-upload/file-upload';
 
 @Component({
   selector: 'app-special-requests',
-  imports: [ReactiveFormsModule, RouterLink, CurrencyPipe, DatePipe],
+  imports: [ReactiveFormsModule, RouterLink, CurrencyPipe, DatePipe, FileUpload],
   templateUrl: './special-requests.html',
   styleUrl: './special-requests.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,8 +32,10 @@ export class SpecialRequestsPage implements OnInit {
   protected readonly requests = signal<SpecialRequest[]>([]);
   protected readonly submitting = signal(false);
   protected readonly error = signal<string | null>(null);
-  protected readonly preview = signal<string | null>(null);
   protected readonly photoFile = signal<File | null>(null);
+  protected readonly uploadReset = signal(0);
+  protected readonly page = signal(1);
+  protected readonly totalPages = signal(1);
 
   protected readonly form = this.fb.nonNullable.group({
     deviceModel: ['', [Validators.required, Validators.minLength(2)]],
@@ -56,11 +59,8 @@ export class SpecialRequestsPage implements OnInit {
     this.reload();
   }
 
-  protected onPhoto(event: Event): void {
-    const file = (event.target as HTMLInputElement).files?.[0] ?? null;
-    if (!file) return;
+  protected onPhoto(file: File | null): void {
     this.photoFile.set(file);
-    this.preview.set(URL.createObjectURL(file));
   }
 
   protected submit(): void {
@@ -85,7 +85,8 @@ export class SpecialRequestsPage implements OnInit {
         this.submitting.set(false);
         this.form.reset({ deviceModel: '', partName: '', quantity: 1, targetPrice: 0 });
         this.photoFile.set(null);
-        this.preview.set(null);
+        this.uploadReset.update((n) => n + 1);
+        this.page.set(1);
         this.reload();
       },
       error: () => {
@@ -96,8 +97,22 @@ export class SpecialRequestsPage implements OnInit {
   }
 
   private reload(): void {
-    this.api.list().subscribe({
-      next: (rows) => this.requests.set(rows),
+    this.api.list({ page: this.page(), limit: 20 }).subscribe({
+      next: (res) => {
+        this.requests.set(res.items);
+        this.page.set(res.page);
+        this.totalPages.set(res.totalPages);
+      },
     });
+  }
+
+  protected goPage(delta: number): void {
+    const next = Math.min(
+      this.totalPages(),
+      Math.max(1, this.page() + delta),
+    );
+    if (next === this.page()) return;
+    this.page.set(next);
+    this.reload();
   }
 }
