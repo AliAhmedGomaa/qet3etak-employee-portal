@@ -49,13 +49,15 @@
   grid-template-columns: repeat(6, 1fr);
   gap: 0.15rem;
   min-height: calc(var(--shell-tabs-h) + var(--sab));
-  padding:
-    0.35rem 0.25rem
-    calc(0.35rem + var(--sab));
+  padding-top: 0.35rem;
+  padding-bottom: calc(0.35rem + var(--sab));
+  padding-left: calc(0.25rem + var(--sal));
+  padding-right: calc(0.25rem + var(--sar));
   background: color-mix(in srgb, var(--surface) 94%, transparent);
   border-top: 1px solid var(--border);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
+  box-sizing: border-box;
 }
 
 .shell__tabs a {
@@ -102,9 +104,9 @@
   place-items: center;
 }
 
-/* Room for fixed tab bar on mobile pages */
+/* Room for fixed tab bar on mobile pages (include home-indicator inset). */
 .shell__main :is(.safe-area-page) {
-  --page-pad-bottom: calc(1.25rem + var(--shell-tabs-h));
+  --page-pad-bottom: calc(1.25rem + var(--shell-tabs-h) + var(--sab));
 }
 
 @media (min-width: 900px) {
@@ -123,12 +125,16 @@
     display: flex;
     align-items: center;
     gap: 1.5rem;
-    min-height: var(--shell-top-h);
-    padding: 0.65rem clamp(1.25rem, 3vw, 2.5rem);
+    min-height: calc(var(--shell-top-h) + var(--sat));
+    padding-top: calc(0.65rem + var(--sat));
+    padding-bottom: 0.65rem;
+    padding-left: calc(clamp(1.25rem, 3vw, 2.5rem) + var(--sal));
+    padding-right: calc(clamp(1.25rem, 3vw, 2.5rem) + var(--sar));
     background: color-mix(in srgb, var(--surface) 92%, transparent);
     border-bottom: 1px solid var(--border);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
+    box-sizing: border-box;
   }
 
   .shell__brand {
