@@ -12,6 +12,7 @@ import {
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/auth/auth.service';
+import { compressImageForUpload } from '../../core/media/compress-image';
 import { FileUpload } from '../../shared/file-upload/file-upload';
 
 @Component({
@@ -80,29 +81,52 @@ export class RegisterShop {
     this.submitting.set(true);
     this.error.set(null);
 
-    const value = this.form.getRawValue();
-    const data = new FormData();
-    Object.entries(value).forEach(([key, val]) => data.append(key, String(val).trim()));
-    data.append('commercialRegPhoto', this.photoFile()!);
+    void this.submitRegistration();
+  }
 
-    this.auth.registerShop(data).subscribe({
-      next: () => {
-        this.submitting.set(false);
-        void this.router.navigateByUrl('/pending');
-      },
-      error: (err: { error?: { message?: string | string[] }; status?: number }) => {
-        this.submitting.set(false);
-        const msg = err.error?.message;
-        this.error.set(
-          Array.isArray(msg)
-            ? msg.join(' · ')
-            : msg ||
-                (err.status === 0
-                  ? 'تعذر الاتصال بالخادم. تأكد أن الـ API يعمل.'
-                  : 'تعذر إكمال التسجيل. حاول مرة أخرى.'),
-        );
-      },
-    });
+  private async submitRegistration(): Promise<void> {
+    try {
+      const photo = await compressImageForUpload(this.photoFile()!);
+      const value = this.form.getRawValue();
+      const data = new FormData();
+      Object.entries(value).forEach(([key, val]) =>
+        data.append(key, String(val).trim()),
+      );
+      data.append('commercialRegPhoto', photo);
+
+      this.auth.registerShop(data).subscribe({
+        next: () => {
+          this.submitting.set(false);
+          void this.router.navigateByUrl('/pending');
+        },
+        error: (err: {
+          error?: { message?: string | string[]; error?: string };
+          status?: number;
+        }) => {
+          this.submitting.set(false);
+          this.error.set(this.formatRegisterError(err));
+        },
+      });
+    } catch {
+      this.submitting.set(false);
+      this.error.set('تعذر تجهيز الصورة. جرّب صورة أصغر أو بصيغة JPG.');
+    }
+  }
+
+  private formatRegisterError(err: {
+    error?: { message?: string | string[]; error?: string };
+    status?: number;
+  }): string {
+    const msg = err.error?.message;
+    if (Array.isArray(msg)) return msg.join(' · ');
+    if (typeof msg === 'string' && msg.trim()) return msg;
+    if (err.status === 413 || err.status === 503) {
+      return 'حجم الصورة كبير جداً. اختر صورة أوضح بحجم أصغر وحاول مرة أخرى.';
+    }
+    if (err.status === 0) {
+      return 'تعذر الاتصال بالخادم. حدّث الصفحة وتأكد من الاتصال.';
+    }
+    return 'تعذر إكمال التسجيل. حاول مرة أخرى.';
   }
 
   /** Convert Arabic-Indic digits and trim so validation/API accept the phone. */

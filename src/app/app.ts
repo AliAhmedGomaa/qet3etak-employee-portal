@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject, isDevMode, OnInit } from '@angular/core';
+import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
 import { RouterOutlet } from '@angular/router';
+import { filter } from 'rxjs/operators';
 import { InstallAppBanner } from './shared/install-app-banner/install-app-banner';
 
 @Component({
@@ -17,4 +19,18 @@ import { InstallAppBanner } from './shared/install-app-banner/install-app-banner
     }
   `,
 })
-export class App {}
+export class App implements OnInit {
+  private readonly swUpdate = inject(SwUpdate, { optional: true });
+
+  ngOnInit(): void {
+    if (isDevMode() || !this.swUpdate?.isEnabled) return;
+
+    // Drop stale cached bundles (e.g. old Render API URL) as soon as a new build is ready.
+    this.swUpdate.versionUpdates
+      .pipe(filter((e): e is VersionReadyEvent => e.type === 'VERSION_READY'))
+      .subscribe(() => {
+        void this.swUpdate!.activateUpdate().then(() => document.location.reload());
+      });
+    void this.swUpdate.checkForUpdate();
+  }
+}

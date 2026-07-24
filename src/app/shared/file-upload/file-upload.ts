@@ -22,7 +22,7 @@ export class FileUpload {
   /** Existing image URL to show in edit mode before a new file is picked. */
   readonly previewUrl = input<string | null>(null);
   readonly label = input('اضغط لاختيار صورة أو اسحبها هنا');
-  readonly hint = input('JPG · PNG · WEBP');
+  readonly hint = input('JPG · PNG · WEBP · يُفضّل أقل من 2MB');
   readonly invalid = input(false);
   readonly disabled = input(false);
   /** Change this value (e.g. increment) to clear the picker from the parent. */

@@ -1,5 +1,6 @@
 export const environment = {
   production: true,
+  /** Production Nest API (Vercel). Do not point at Render. */
   apiUrl: 'https://qet3etak-backend.vercel.app',
   whatsappSupport: '201000000000',
   vapidPublicKey:
