@@ -9,4 +9,5 @@ export interface Paginated<T> {
 export type PageParams = {
   page?: number;
   limit?: number;
+  q?: string;
 };

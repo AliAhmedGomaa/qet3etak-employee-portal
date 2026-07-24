@@ -1,0 +1,78 @@
+<section class="create safe-area-page" dir="rtl">
+  <header>
+    <div>
+      <h1>طلب إرجاع</h1>
+      @if (order(); as o) {
+        <p>طلب {{ o.orderNumber }} · اختر الأصناف والكميات وسبب الإرجاع</p>
+      }
+    </div>
+    <a [routerLink]="order() ? ['/orders', order()!.id] : '/orders'">رجوع</a>
+  </header>
+
+  @if (order(); as o) {
+    <form class="form" (ngSubmit)="submit()">
+      <div class="items">
+        @for (line of lines(); track line.productId; let i = $index) {
+          <label class="item">
+            <input
+              type="checkbox"
+              [checked]="line.selected"
+              (change)="toggleLine(i, $any($event.target).checked)"
+            />
+            <span class="item__body">
+              <strong>{{ line.title }}</strong>
+              <small>
+                سعر الوحدة
+                {{ line.unitPrice | currency: 'EGP':'symbol-narrow':'1.2-2' }}
+                · متاح {{ line.maxQty }}
+              </small>
+            </span>
+            <input
+              class="qty"
+              type="number"
+              min="1"
+              [max]="line.maxQty"
+              [ngModel]="line.quantity"
+              [ngModelOptions]="{ standalone: true }"
+              [disabled]="!line.selected"
+              (ngModelChange)="setQty(i, $event)"
+            />
+          </label>
+        }
+      </div>
+
+      <label class="reason">
+        سبب الإرجاع
+        <textarea
+          rows="4"
+          [(ngModel)]="reason"
+          name="reason"
+          placeholder="مثال: القطعة تالفة / غير مطابقة"
+        ></textarea>
+      </label>
+
+      <div class="total">
+        <span>قيمة الإرجاع التقديرية</span>
+        <strong>{{ estimatedRefund() | currency: 'EGP':'symbol-narrow':'1.2-2' }}</strong>
+      </div>
+
+      @if (o.paymentMethod === 'CREDIT') {
+        <p class="hint">عند الموافقة يُخصم المبلغ من رصيد الآجل في المحفظة.</p>
+      } @else {
+        <p class="hint">طلب الدفع عند الاستلام — لا يُعدَّل رصيد المحفظة تلقائياً.</p>
+      }
+
+      @if (error()) {
+        <p class="err">{{ error() }}</p>
+      }
+
+      <button type="submit" [disabled]="submitting() || o.status !== 'DELIVERED'">
+        {{ submitting() ? 'جارٍ الإرسال…' : 'إرسال طلب الإرجاع' }}
+      </button>
+    </form>
+  } @else if (error()) {
+    <p class="err">{{ error() }}</p>
+  } @else {
+    <p class="empty">جارٍ التحميل…</p>
+  }
+</section>

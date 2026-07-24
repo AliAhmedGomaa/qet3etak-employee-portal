@@ -75,6 +75,18 @@ export const routes: Routes = [
           import('./features/orders/order-detail').then((m) => m.OrderDetail),
       },
       {
+        path: 'invoices',
+        loadComponent: () =>
+          import('./features/invoices/invoices').then((m) => m.InvoicesPage),
+      },
+      {
+        path: 'invoices/:id',
+        loadComponent: () =>
+          import('./features/invoices/invoice-detail').then(
+            (m) => m.InvoiceDetail,
+          ),
+      },
+      {
         path: 'special-requests',
         loadComponent: () =>
           import('./features/special-requests/special-requests').then(

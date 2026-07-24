@@ -39,6 +39,7 @@ export interface ShopOrder {
   status: OrderStatus;
   paymentMethod: PaymentMethod;
   items: Array<{
+    productId?: string;
     title: string;
     quantity: number;
     unitPrice: number;
@@ -47,6 +48,30 @@ export interface ShopOrder {
   total: number;
   statusHistory: Array<{ status: OrderStatus; at: string; note: string }>;
   createdAt?: string;
+}
+
+export type ReorderWarningCode =
+  | 'UNAVAILABLE'
+  | 'OUT_OF_STOCK'
+  | 'QTY_REDUCED'
+  | 'PRICE_CHANGED';
+
+export interface ReorderWarning {
+  code: ReorderWarningCode;
+  productId: string;
+  title: string;
+  message: string;
+  requestedQuantity?: number;
+  availableQuantity?: number;
+  previousUnitPrice?: number;
+  currentUnitPrice?: number;
+}
+
+export interface ReorderResult {
+  order: ShopOrder;
+  warnings: ReorderWarning[];
+  sourceOrderId: string;
+  sourceOrderNumber: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -82,5 +107,15 @@ export class OrdersApiService {
 
   myOrder(id: string): Observable<ShopOrder> {
     return this.http.get<ShopOrder>(`${this.api}/wholesale/orders/${id}`);
+  }
+
+  reorder(
+    id: string,
+    body: { paymentMethod?: PaymentMethod; notes?: string } = {},
+  ): Observable<ReorderResult> {
+    return this.http.post<ReorderResult>(
+      `${this.api}/wholesale/orders/${id}/reorder`,
+      body,
+    );
   }
 }
