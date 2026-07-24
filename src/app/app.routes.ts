@@ -99,6 +99,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'reports',
+        loadComponent: () =>
+          import('./features/reports/shop-reports').then(
+            (m) => m.ShopReportsPage,
+          ),
+      },
+      {
         path: 'special-requests',
         loadComponent: () =>
           import('./features/special-requests/special-requests').then(

@@ -1,12 +1,27 @@
-/* ——— Qet3etak Shop Owner · global tokens + Safe Area View ——— */
+/* ——— Qet3etak Shop Owner · global tokens + Safe Area View + dark theme ——— */
 
 :root {
   --brand: #0f172a;
   --accent: #10b880;
+  --accent-strong: #0d9a6a;
+  --accent-soft: rgba(16, 184, 128, 0.12);
   --surface: #ffffff;
   --surface-muted: #f8fafc;
+  --surface-elevated: #ffffff;
   --ink: #0f172a;
   --ink-muted: #64748b;
+  --ink-soft: #94a3b8;
+  --border: #e2e8f0;
+  --border-strong: #cbd5e1;
+  --danger: #991b1b;
+  --danger-bg: #fef2f2;
+  --overlay: rgba(15, 23, 42, 0.45);
+  --shadow: 0 16px 40px rgba(15, 23, 42, 0.06);
+  --chip-ok-bg: #ecfdf6;
+  --chip-ok-ink: #074a35;
+  --input-bg: #ffffff;
+  --canvas: #f1f5f9;
+  --row-hover: #f1f5f9;
 
   /*
    * Safe-area insets (notch, Dynamic Island, home indicator, landscape edges).
@@ -25,6 +40,31 @@
   --page-pad-x: 1rem;
   --page-pad-top: 1rem;
   --page-pad-bottom: 1.5rem;
+}
+
+html[data-theme='dark'] {
+  --brand: #e2e8f0;
+  --accent: #34d399;
+  --accent-strong: #10b880;
+  --accent-soft: rgba(52, 211, 153, 0.16);
+  --surface: #1e293b;
+  --surface-muted: #0f172a;
+  --surface-elevated: #243044;
+  --ink: #e2e8f0;
+  --ink-muted: #94a3b8;
+  --ink-soft: #64748b;
+  --border: #334155;
+  --border-strong: #475569;
+  --danger: #fca5a5;
+  --danger-bg: rgba(127, 29, 29, 0.35);
+  --overlay: rgba(2, 6, 23, 0.65);
+  --shadow: 0 16px 40px rgba(2, 6, 23, 0.45);
+  --chip-ok-bg: rgba(16, 184, 128, 0.2);
+  --chip-ok-ink: #6ee7b7;
+  --input-bg: #0f172a;
+  --canvas: #020617;
+  --row-hover: rgba(148, 163, 184, 0.08);
+  color-scheme: dark;
 }
 
 *,
@@ -107,6 +147,102 @@ body {
 /* Desktop website canvas */
 @media (min-width: 900px) {
   body {
-    background: #f1f5f9;
+    background: var(--canvas);
+  }
+}
+
+/* ——— Dark theme: cover main shop flows without rewriting every SCSS file ——— */
+html[data-theme='dark'] {
+  .shell,
+  .returns,
+  .orders,
+  .catalog,
+  .home,
+  .wallet,
+  .invoices,
+  .checkout,
+  .support,
+  .login,
+  .pending,
+  .reports,
+  .special-requests,
+  .register {
+    background: var(--surface-muted) !important;
+    color: var(--ink);
+  }
+
+  .shell__top,
+  .shell__tabs {
+    background: color-mix(in srgb, var(--surface) 94%, transparent) !important;
+    border-color: var(--border) !important;
+  }
+
+  .shell__nav a,
+  .shell__tabs a {
+    color: var(--ink-muted) !important;
+  }
+
+  .shell__nav a.is-active,
+  .shell__tabs a.is-active {
+    background: var(--accent-soft) !important;
+    color: var(--ink) !important;
+  }
+
+  .login form,
+  .list article,
+  .orders article,
+  .product-card,
+  .card,
+  .panel,
+  .thread,
+  .composer,
+  .checkout__card,
+  .wallet__card,
+  .inv-card,
+  .support__pane {
+    background: var(--surface) !important;
+    border-color: var(--border) !important;
+    color: var(--ink);
+    box-shadow: none;
+  }
+
+  input,
+  select,
+  textarea {
+    background: var(--input-bg) !important;
+    border-color: var(--border) !important;
+    color: var(--ink) !important;
+  }
+
+  .err {
+    background: var(--danger-bg) !important;
+    color: var(--danger) !important;
+  }
+
+  .empty,
+  header p,
+  .muted,
+  article small,
+  .shell__brand small {
+    color: var(--ink-muted) !important;
+  }
+
+  .pager button,
+  .shell__logout,
+  .shell__theme {
+    background: var(--surface) !important;
+    border-color: var(--border) !important;
+    color: var(--ink) !important;
+  }
+
+  .badge:not(.badge--bad):not(.badge--ok) {
+    background: var(--chip-ok-bg) !important;
+    color: var(--chip-ok-ink) !important;
+  }
+
+  .overlay,
+  .modal,
+  .sheet-scrim {
+    background: var(--overlay) !important;
   }
 }

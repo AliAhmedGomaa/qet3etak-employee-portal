@@ -1,4 +1,8 @@
-export type UserStatus = 'PENDING_VERIFICATION' | 'APPROVED' | 'REJECTED';
+export type UserStatus =
+  | 'PENDING_VERIFICATION'
+  | 'APPROVED'
+  | 'REJECTED'
+  | 'SUSPENDED';
 export type UserRole = 'SHOP_OWNER' | 'ADMIN';
 
 export interface ShopUser {

@@ -12,6 +12,13 @@
       <p class="pending__lead">
         {{ user()?.rejectionReason || 'يرجى التواصل مع الدعم لمزيد من التفاصيل.' }}
       </p>
+    } @else if (isSuspended()) {
+      <h1>الحساب موقوف</h1>
+      <p class="pending__lead">
+        تم إيقاف حساب
+        <strong>{{ user()?.shopName }}</strong>
+        مؤقتاً. تواصل مع الإدارة لإعادة التفعيل.
+      </p>
     } @else {
       <h1>الحساب قيد المراجعة من الإدارة</h1>
       <p class="pending__lead">

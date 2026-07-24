@@ -3,6 +3,7 @@ import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
 import { RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { InstallAppBanner } from './shared/install-app-banner/install-app-banner';
+import { ThemeService } from './core/theme/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -21,8 +22,10 @@ import { InstallAppBanner } from './shared/install-app-banner/install-app-banner
 })
 export class App implements OnInit {
   private readonly swUpdate = inject(SwUpdate, { optional: true });
+  private readonly theme = inject(ThemeService);
 
   ngOnInit(): void {
+    this.theme.init();
     if (isDevMode() || !this.swUpdate?.isEnabled) return;
 
     // Drop stale cached bundles (e.g. old Render API URL) as soon as a new build is ready.

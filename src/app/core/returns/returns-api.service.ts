@@ -39,8 +39,10 @@ export class ReturnsApi {
 
   list(params: PageParams = {}): Observable<Paginated<ReturnRequest>> {
     let httpParams = new HttpParams();
-    if (params.page) httpParams = httpParams.set('page', String(params.page));
-    if (params.limit) httpParams = httpParams.set('limit', String(params.limit));
+    if (params.page != null)
+      httpParams = httpParams.set('page', String(params.page));
+    if (params.limit != null)
+      httpParams = httpParams.set('limit', String(params.limit));
     return this.http.get<Paginated<ReturnRequest>>(this.base, {
       params: httpParams,
     });

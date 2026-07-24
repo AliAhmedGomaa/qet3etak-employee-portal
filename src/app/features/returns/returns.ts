@@ -26,6 +26,7 @@ export class ReturnsPage implements OnInit {
   protected readonly loading = signal(false);
   protected readonly page = signal(1);
   protected readonly totalPages = signal(1);
+  protected readonly total = signal(0);
 
   protected statusLabel(status: string): string {
     const map: Record<string, string> = {
@@ -47,6 +48,7 @@ export class ReturnsPage implements OnInit {
         this.requests.set(res.items);
         this.page.set(res.page);
         this.totalPages.set(res.totalPages);
+        this.total.set(res.total);
         this.loading.set(false);
       },
       error: () => this.loading.set(false),

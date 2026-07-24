@@ -12,6 +12,7 @@
       <a routerLink="/home" routerLinkActive="is-active">الرئيسية</a>
       <a routerLink="/catalog" routerLinkActive="is-active">الكتالوج</a>
       <a routerLink="/orders" routerLinkActive="is-active">الطلبات</a>
+      <a routerLink="/reports" routerLinkActive="is-active">التقارير</a>
       <a routerLink="/returns" routerLinkActive="is-active">المرتجعات</a>
       <a routerLink="/invoices" routerLinkActive="is-active">الفواتير</a>
       <a routerLink="/wallet" routerLinkActive="is-active">المحفظة</a>
@@ -27,10 +28,27 @@
     </nav>
 
     <div class="shell__actions">
+      <button
+        type="button"
+        class="shell__theme"
+        (click)="theme.toggle()"
+        [attr.aria-label]="theme.theme() === 'dark' ? 'تفعيل الوضع الفاتح' : 'تفعيل الوضع الداكن'"
+      >
+        {{ theme.theme() === 'dark' ? '☀ فاتح' : '☾ داكن' }}
+      </button>
       <a routerLink="/checkout" class="shell__cart">{{ cartLabel() }}</a>
       <button type="button" class="shell__logout" (click)="auth.logout()">خروج</button>
     </div>
   </header>
+
+  <button
+    type="button"
+    class="shell__theme-fab"
+    (click)="theme.toggle()"
+    [attr.aria-label]="theme.theme() === 'dark' ? 'تفعيل الوضع الفاتح' : 'تفعيل الوضع الداكن'"
+  >
+    {{ theme.theme() === 'dark' ? '☀' : '☾' }}
+  </button>
 
   <main class="shell__main">
     <router-outlet />

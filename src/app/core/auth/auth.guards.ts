@@ -15,14 +15,17 @@ export const pendingVerificationGuard: CanActivateFn = () => {
     return router.createUrlTree(['/pending']);
   }
 
-  if (auth.user()?.status === 'REJECTED') {
+  if (
+    auth.user()?.status === 'REJECTED' ||
+    auth.user()?.status === 'SUSPENDED'
+  ) {
     return router.createUrlTree(['/pending']);
   }
 
   return true;
 };
 
-/** Pending review screen — only for authenticated pending/rejected users. */
+/** Pending review screen — only for authenticated pending/rejected/suspended users. */
 export const pendingScreenGuard: CanActivateFn = () => {
   const auth = inject(AuthService);
   const router = inject(Router);
@@ -43,7 +46,11 @@ export const guestGuard: CanActivateFn = () => {
   const router = inject(Router);
 
   if (!auth.isAuthenticated()) return true;
-  if (auth.isPending() || auth.user()?.status === 'REJECTED') {
+  if (
+    auth.isPending() ||
+    auth.user()?.status === 'REJECTED' ||
+    auth.user()?.status === 'SUSPENDED'
+  ) {
     return router.createUrlTree(['/pending']);
   }
   return router.createUrlTree(['/home']);

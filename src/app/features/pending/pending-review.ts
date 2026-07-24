@@ -23,12 +23,16 @@ export class PendingReview implements OnInit {
   protected readonly isRejected = computed(
     () => this.user()?.status === 'REJECTED',
   );
+  protected readonly isSuspended = computed(
+    () => this.user()?.status === 'SUSPENDED',
+  );
 
   protected readonly statusLabel = computed(() => {
     const map: Record<string, string> = {
       PENDING_VERIFICATION: 'قيد المراجعة',
       APPROVED: 'معتمد',
       REJECTED: 'مرفوض',
+      SUSPENDED: 'موقوف',
     };
     const status = this.user()?.status;
     return status ? map[status] ?? status : '—';

@@ -40,7 +40,7 @@
   @if (totalPages() > 1) {
     <nav class="pager" aria-label="صفحات المرتجعات">
       <button type="button" (click)="goPage(-1)" [disabled]="page() <= 1">السابق</button>
-      <span>{{ page() }} / {{ totalPages() }}</span>
+      <span>{{ page() }} / {{ totalPages() }} · {{ total() }} مرتجع</span>
       <button type="button" (click)="goPage(1)" [disabled]="page() >= totalPages()">التالي</button>
     </nav>
   }
