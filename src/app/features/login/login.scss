@@ -77,7 +77,8 @@
   font-weight: 700;
 }
 
-html[data-theme='dark'] .login button[type='submit'] {
+html[data-theme='dark'] .login button[type='submit'],
+:host-context(html[data-theme='dark']) .login button[type='submit'] {
   background: var(--accent);
   color: #042f1e;
 }
