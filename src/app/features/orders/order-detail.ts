@@ -65,6 +65,11 @@ import { OrderStepper } from './order-stepper';
           {{ reordering() ? 'جارٍ إعادة الطلب…' : 'إعادة الطلب' }}
         </button>
 
+        @if (o.status === 'DELIVERED') {
+          <a class="return-cta" [routerLink]="['/returns/new', o.id]">طلب إرجاع</a>
+        }
+        <p class="returns-link"><a routerLink="/returns">عرض طلبات الإرجاع</a></p>
+
         <h2>الخط الزمني</h2>
         <ol class="timeline">
           @for (ev of o.statusHistory; track $index) {
@@ -113,6 +118,25 @@ import { OrderStepper } from './order-stepper';
       margin-bottom: 1.25rem;
     }
     .submit:disabled { opacity: 0.65; cursor: wait; }
+    .return-cta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 3rem;
+      margin-bottom: 0.65rem;
+      border-radius: 0.85rem;
+      background: #fff;
+      color: #0d9a6a !important;
+      font-weight: 800;
+      text-decoration: none;
+      border: 1.5px solid #10b880;
+    }
+    .returns-link {
+      margin: 0 0 1.25rem;
+      text-align: center;
+      font-size: 0.85rem;
+    }
+    .returns-link a { font-weight: 600; }
     .err {
       background: #fef2f2;
       color: #b91c1c;

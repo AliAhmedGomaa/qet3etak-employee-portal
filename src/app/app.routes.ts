@@ -87,6 +87,18 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'returns',
+        loadComponent: () =>
+          import('./features/returns/returns').then((m) => m.ReturnsPage),
+      },
+      {
+        path: 'returns/new/:orderId',
+        loadComponent: () =>
+          import('./features/returns/return-create').then(
+            (m) => m.ReturnCreatePage,
+          ),
+      },
+      {
         path: 'special-requests',
         loadComponent: () =>
           import('./features/special-requests/special-requests').then(

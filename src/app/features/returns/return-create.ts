@@ -63,15 +63,20 @@ export class ReturnCreatePage implements OnInit {
           return;
         }
         this.lines.set(
-          o.items.map((item) => ({
-            productId: item.productId,
-            title: item.title,
-            maxQty: item.quantity,
-            unitPrice: item.unitPrice,
-            selected: true,
-            quantity: item.quantity,
-          })),
+          o.items
+            .filter((item) => !!item.productId)
+            .map((item) => ({
+              productId: item.productId!,
+              title: item.title,
+              maxQty: item.quantity,
+              unitPrice: item.unitPrice,
+              selected: true,
+              quantity: item.quantity,
+            })),
         );
+        if (this.lines().length === 0) {
+          this.error.set('لا يمكن إرجاع أصناف هذا الطلب (بيانات غير مكتملة)');
+        }
       },
       error: () => this.error.set('تعذر تحميل الطلب'),
     });
