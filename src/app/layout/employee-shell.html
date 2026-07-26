@@ -1,0 +1,99 @@
+<div class="shell" dir="rtl">
+  <!-- Desktop / tablet web chrome -->
+  <header class="shell__top">
+    <a routerLink="/home" class="shell__brand">
+      @if (branding.branding().logoUrl; as logo) {
+        <img [src]="logo" width="36" height="36" alt="" />
+      } @else {
+        <img src="icons/icon-192x192.png" width="36" height="36" alt="" />
+      }
+      <span>
+        <strong>{{ branding.branding().appName }}</strong>
+        <small>بوابة الموظف · {{ auth.user()?.fullName }}</small>
+      </span>
+    </a>
+
+    <nav class="shell__nav" aria-label="التنقل الرئيسي">
+      <a routerLink="/home" routerLinkActive="is-active">الراتب</a>
+      <a routerLink="/attendance" routerLinkActive="is-active">الساعات</a>
+      <a routerLink="/vacations" routerLinkActive="is-active">الإجازات</a>
+      <a routerLink="/adjustments" routerLinkActive="is-active">المكافآت</a>
+    </nav>
+
+    <div class="shell__actions">
+      <button
+        type="button"
+        class="shell__push"
+        [class.on]="push.enabled()"
+        [disabled]="push.busy() || !push.supported()"
+        (click)="push.toggle()"
+        [title]="push.enabled() ? 'إيقاف الإشعارات' : 'تفعيل الإشعارات'"
+      >
+        {{ push.enabled() ? 'الإشعارات مفعّلة' : 'تفعيل الإشعارات' }}
+      </button>
+      <button
+        type="button"
+        class="shell__theme"
+        (click)="theme.toggle()"
+        [attr.aria-label]="theme.theme() === 'dark' ? 'تفعيل الوضع الفاتح' : 'تفعيل الوضع الداكن'"
+      >
+        {{ theme.theme() === 'dark' ? '☀ فاتح' : '☾ داكن' }}
+      </button>
+      <button type="button" class="shell__logout" (click)="auth.logout()">خروج</button>
+    </div>
+  </header>
+
+  <!-- Mobile floating actions -->
+  <div class="shell__fabs">
+    <button
+      type="button"
+      class="shell__push-fab"
+      [class.on]="push.enabled()"
+      [disabled]="push.busy() || !push.supported()"
+      (click)="push.toggle()"
+      [attr.aria-label]="push.enabled() ? 'إيقاف الإشعارات' : 'تفعيل الإشعارات'"
+    >
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+        <path
+          d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
+    <button
+      type="button"
+      class="shell__theme-fab"
+      (click)="theme.toggle()"
+      [attr.aria-label]="theme.theme() === 'dark' ? 'تفعيل الوضع الفاتح' : 'تفعيل الوضع الداكن'"
+    >
+      {{ theme.theme() === 'dark' ? '☀' : '☾' }}
+    </button>
+  </div>
+
+  <main class="shell__main">
+    <router-outlet />
+  </main>
+
+  <!-- Mobile app tab bar -->
+  <nav class="shell__tabs" aria-label="تنقل التطبيق">
+    <a routerLink="/home" routerLinkActive="is-active">
+      <span class="ico" aria-hidden="true">◈</span>
+      الراتب
+    </a>
+    <a routerLink="/attendance" routerLinkActive="is-active">
+      <span class="ico" aria-hidden="true">⏱</span>
+      الساعات
+    </a>
+    <a routerLink="/vacations" routerLinkActive="is-active">
+      <span class="ico" aria-hidden="true">☀</span>
+      الإجازات
+    </a>
+    <a routerLink="/adjustments" routerLinkActive="is-active">
+      <span class="ico" aria-hidden="true">✦</span>
+      المكافآت
+    </a>
+  </nav>
+
+  <app-install-app-banner />
+</div>
