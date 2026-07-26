@@ -41,6 +41,13 @@ export const routes: Routes = [
             (m) => m.EmployeeAdjustments,
           ),
       },
+      {
+        path: 'support',
+        loadComponent: () =>
+          import('./features/support/employee-support-chat').then(
+            (m) => m.EmployeeSupportChat,
+          ),
+      },
     ],
   },
   { path: '**', redirectTo: 'home' },

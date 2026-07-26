@@ -18,6 +18,7 @@
       <a routerLink="/attendance" routerLinkActive="is-active">الساعات</a>
       <a routerLink="/vacations" routerLinkActive="is-active">الإجازات</a>
       <a routerLink="/adjustments" routerLinkActive="is-active">المكافآت</a>
+      <a routerLink="/support" routerLinkActive="is-active">الدعم</a>
     </nav>
 
     <div class="shell__actions">
@@ -92,6 +93,13 @@
     <a routerLink="/adjustments" routerLinkActive="is-active">
       <span class="ico" aria-hidden="true">✦</span>
       المكافآت
+    </a>
+    <a routerLink="/support" routerLinkActive="is-active">
+      <span class="ico" aria-hidden="true">◉</span>
+      الدعم
+      @if (chat.unread() > 0) {
+        <em class="tab-badge">{{ chat.unread() }}</em>
+      }
     </a>
   </nav>
 

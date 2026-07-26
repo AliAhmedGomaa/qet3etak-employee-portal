@@ -7,6 +7,7 @@ import {
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../core/auth/auth.service';
 import { BrandingService } from '../core/branding/branding.service';
+import { ChatService } from '../core/chat/chat.service';
 import { ThemeService } from '../core/theme/theme.service';
 import { PushNotificationService } from '../core/push/push-notification.service';
 import { InstallAppBanner } from '../shared/install-app-banner/install-app-banner';
@@ -23,8 +24,13 @@ export class EmployeeShell {
   protected readonly branding = inject(BrandingService);
   protected readonly theme = inject(ThemeService);
   protected readonly push = inject(PushNotificationService);
+  protected readonly chat = inject(ChatService);
 
   constructor() {
-    afterNextRender(() => this.push.listenForPush());
+    afterNextRender(() => {
+      this.push.listenForPush();
+      this.chat.connect();
+      this.chat.loadThread().subscribe();
+    });
   }
 }

@@ -1,0 +1,54 @@
+<section class="chat" dir="rtl">
+  <header class="chat__head">
+    <div class="chat__peer">
+      <span class="chat__avatar" aria-hidden="true">قط</span>
+      <div>
+        <strong>دعم قطع الغيار</strong>
+        <small [class.is-online]="chat.connected()">
+          {{ chat.connected() ? 'متصل الآن' : 'غير متصل' }}
+        </small>
+      </div>
+    </div>
+  </header>
+
+  <div class="chat__body" #scrollBox>
+    @if (loading()) {
+      <p class="chat__hint">جارٍ تحميل المحادثة…</p>
+    } @else if (chat.messages().length === 0) {
+      <div class="chat__empty">
+        <p>ابدأ محادثة مع فريق الدعم. نحن هنا لمساعدتك.</p>
+      </div>
+    }
+
+    @for (msg of chat.messages(); track msg.id) {
+      <div
+        class="bubble"
+        [class.bubble--mine]="isMine(msg.senderRole)"
+        [class.bubble--them]="!isMine(msg.senderRole)"
+      >
+        <p class="bubble__text">{{ msg.text }}</p>
+        <time class="bubble__time">{{ msg.createdAt | date: 'shortTime' }}</time>
+      </div>
+    }
+
+    @if (chat.adminTyping()) {
+      <div class="bubble bubble--them bubble--typing">
+        <span></span><span></span><span></span>
+      </div>
+    }
+  </div>
+
+  <form class="chat__compose" (ngSubmit)="send()">
+    <textarea
+      rows="1"
+      placeholder="اكتب رسالتك…"
+      [ngModel]="draft()"
+      (ngModelChange)="onInput($event)"
+      (keydown)="onKeydown($event)"
+      name="draft"
+    ></textarea>
+    <button type="submit" [disabled]="!draft().trim()" aria-label="إرسال">
+      إرسال
+    </button>
+  </form>
+</section>
