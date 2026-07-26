@@ -1,24 +1,17 @@
-export type UserStatus =
-  | 'PENDING_VERIFICATION'
-  | 'APPROVED'
-  | 'REJECTED'
-  | 'SUSPENDED';
-export type UserRole = 'SHOP_OWNER' | 'ADMIN';
-
-export interface ShopUser {
+export interface EmployeeUser {
   id: string;
   fullName: string;
-  shopName: string;
   phone: string;
-  city: string;
-  address: string;
-  commercialRegPhotoUrl: string;
-  status: UserStatus;
-  role: UserRole;
-  rejectionReason?: string;
+  jobTitle: string;
+  hourlyRate: number;
+  standardDailyHours: number;
+  annualLeaveDays: number;
+  status: string;
+  role: 'EMPLOYEE';
+  kind: 'employee';
 }
 
 export interface AuthResponse {
   accessToken: string;
-  user: ShopUser;
+  user: EmployeeUser;
 }

@@ -1,57 +1,17 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { AuthService } from '../auth/auth.service';
+import { AuthService } from './auth.service';
 
-/** Blocks wholesale/home when account is still under review. */
-export const pendingVerificationGuard: CanActivateFn = () => {
+export const employeeAuthGuard: CanActivateFn = () => {
   const auth = inject(AuthService);
   const router = inject(Router);
-
-  if (!auth.isAuthenticated()) {
-    return router.createUrlTree(['/']);
-  }
-
-  if (auth.isPending()) {
-    return router.createUrlTree(['/pending']);
-  }
-
-  if (
-    auth.user()?.status === 'REJECTED' ||
-    auth.user()?.status === 'SUSPENDED'
-  ) {
-    return router.createUrlTree(['/pending']);
-  }
-
-  return true;
+  if (auth.isAuthenticated()) return true;
+  return router.createUrlTree(['/login']);
 };
 
-/** Pending review screen — only for authenticated pending/rejected/suspended users. */
-export const pendingScreenGuard: CanActivateFn = () => {
+export const employeeGuestGuard: CanActivateFn = () => {
   const auth = inject(AuthService);
   const router = inject(Router);
-
-  if (!auth.isAuthenticated()) {
-    return router.createUrlTree(['/']);
-  }
-
-  if (auth.isApproved()) {
-    return router.createUrlTree(['/home']);
-  }
-
-  return true;
-};
-
-export const guestGuard: CanActivateFn = () => {
-  const auth = inject(AuthService);
-  const router = inject(Router);
-
   if (!auth.isAuthenticated()) return true;
-  if (
-    auth.isPending() ||
-    auth.user()?.status === 'REJECTED' ||
-    auth.user()?.status === 'SUSPENDED'
-  ) {
-    return router.createUrlTree(['/pending']);
-  }
   return router.createUrlTree(['/home']);
 };

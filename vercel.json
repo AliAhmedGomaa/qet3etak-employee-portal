@@ -1,7 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "npm run build && npm run postbuild:vercel",
-  "outputDirectory": "dist/shop-owner/browser",
+  "outputDirectory": "dist/employee-portal/browser",
   "framework": null,
   "rewrites": [
     {

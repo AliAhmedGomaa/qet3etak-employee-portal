@@ -7,7 +7,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "shop-owner": {
+    "employee-portal": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -103,10 +103,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "shop-owner:build:production"
+              "buildTarget": "employee-portal:build:production"
             },
             "development": {
-              "buildTarget": "shop-owner:build:development"
+              "buildTarget": "employee-portal:build:development"
             }
           },
           "defaultConfiguration": "development"

@@ -1,123 +1,47 @@
 import { Routes } from '@angular/router';
-import {
-  guestGuard,
-  pendingScreenGuard,
-  pendingVerificationGuard,
-} from './core/auth/auth.guards';
+import { employeeAuthGuard, employeeGuestGuard } from './core/auth/auth.guards';
 
 export const routes: Routes = [
   {
-    path: '',
-    pathMatch: 'full',
-    canActivate: [guestGuard],
-    loadComponent: () =>
-      import('./features/landing/landing').then((m) => m.Landing),
-  },
-  {
-    path: 'register',
-    canActivate: [guestGuard],
-    loadComponent: () =>
-      import('./features/register/register-shop').then((m) => m.RegisterShop),
-  },
-  {
     path: 'login',
-    canActivate: [guestGuard],
+    canActivate: [employeeGuestGuard],
     loadComponent: () =>
-      import('./features/login/login').then((m) => m.Login),
-  },
-  {
-    path: 'pending',
-    canActivate: [pendingScreenGuard],
-    loadComponent: () =>
-      import('./features/pending/pending-review').then((m) => m.PendingReview),
+      import('./features/login/employee-login').then((m) => m.EmployeeLogin),
   },
   {
     path: '',
-    canActivate: [pendingVerificationGuard],
+    canActivate: [employeeAuthGuard],
     loadComponent: () =>
-      import('./layout/shop-shell').then((m) => m.ShopShell),
+      import('./layout/employee-shell').then((m) => m.EmployeeShell),
     children: [
+      { path: '', pathMatch: 'full', redirectTo: 'home' },
       {
         path: 'home',
         loadComponent: () =>
-          import('./features/home/home').then((m) => m.Home),
+          import('./features/home/employee-home').then((m) => m.EmployeeHome),
       },
       {
-        path: 'catalog',
+        path: 'attendance',
         loadComponent: () =>
-          import('./features/catalog/catalog').then((m) => m.Catalog),
-      },
-      {
-        path: 'catalog/:id',
-        loadComponent: () =>
-          import('./features/catalog/product-detail').then(
-            (m) => m.ProductDetail,
+          import('./features/attendance/employee-attendance').then(
+            (m) => m.EmployeeAttendance,
           ),
       },
       {
-        path: 'checkout',
+        path: 'vacations',
         loadComponent: () =>
-          import('./features/checkout/checkout').then((m) => m.Checkout),
-      },
-      {
-        path: 'wallet',
-        loadComponent: () =>
-          import('./features/wallet/wallet').then((m) => m.WalletPage),
-      },
-      {
-        path: 'orders',
-        loadComponent: () =>
-          import('./features/orders/orders').then((m) => m.OrdersPage),
-      },
-      {
-        path: 'orders/:id',
-        loadComponent: () =>
-          import('./features/orders/order-detail').then((m) => m.OrderDetail),
-      },
-      {
-        path: 'invoices',
-        loadComponent: () =>
-          import('./features/invoices/invoices').then((m) => m.InvoicesPage),
-      },
-      {
-        path: 'invoices/:id',
-        loadComponent: () =>
-          import('./features/invoices/invoice-detail').then(
-            (m) => m.InvoiceDetail,
+          import('./features/vacations/employee-vacations').then(
+            (m) => m.EmployeeVacations,
           ),
       },
       {
-        path: 'returns',
+        path: 'adjustments',
         loadComponent: () =>
-          import('./features/returns/returns').then((m) => m.ReturnsPage),
-      },
-      {
-        path: 'returns/new/:orderId',
-        loadComponent: () =>
-          import('./features/returns/return-create').then(
-            (m) => m.ReturnCreatePage,
+          import('./features/adjustments/employee-adjustments').then(
+            (m) => m.EmployeeAdjustments,
           ),
-      },
-      {
-        path: 'reports',
-        loadComponent: () =>
-          import('./features/reports/shop-reports').then(
-            (m) => m.ShopReportsPage,
-          ),
-      },
-      {
-        path: 'special-requests',
-        loadComponent: () =>
-          import('./features/special-requests/special-requests').then(
-            (m) => m.SpecialRequestsPage,
-          ),
-      },
-      {
-        path: 'support',
-        loadComponent: () =>
-          import('./features/support/support-chat').then((m) => m.SupportChat),
       },
     ],
   },
-  { path: '**', redirectTo: '' },
+  { path: '**', redirectTo: 'home' },
 ];

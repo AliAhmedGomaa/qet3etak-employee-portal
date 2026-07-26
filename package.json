@@ -1,5 +1,5 @@
 {
-  "name": "shop-owner",
+  "name": "employee-portal",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -7,8 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:shop-owner": "node dist/shop-owner/server/server.mjs",
-    "postbuild:vercel": "node -e \"const fs=require('fs');const p='dist/shop-owner/browser';const src=p+'/index.csr.html';const dest=p+'/index.html';if(fs.existsSync(src)){fs.copyFileSync(src,dest);console.log('Copied index.csr.html → index.html');}else{console.warn('index.csr.html missing — skip copy');}\""
+    "serve:ssr:employee-portal": "node dist/employee-portal/server/server.mjs",
+    "postbuild:vercel": "node -e \"const fs=require('fs');const p='dist/employee-portal/browser';const src=p+'/index.csr.html';const dest=p+'/index.html';if(fs.existsSync(src)){fs.copyFileSync(src,dest);console.log('Copied index.csr.html → index.html');}else{console.warn('index.csr.html missing — skip copy');}\""
   },
   "private": true,
   "packageManager": "npm@11.17.0",
