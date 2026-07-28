@@ -1,10 +1,12 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { SwPush } from '@angular/service-worker';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 const ENABLED_KEY = 'qet3etak.employee.push.enabled';
+const DEFAULT_URL = '/home';
 
 function urlBase64ToUint8Array(base64String: string): Uint8Array {
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
@@ -18,6 +20,7 @@ function urlBase64ToUint8Array(base64String: string): Uint8Array {
 @Injectable({ providedIn: 'root' })
 export class PushNotificationService {
   private readonly http = inject(HttpClient);
+  private readonly router = inject(Router);
   private readonly swPush = inject(SwPush, { optional: true });
 
   readonly enabled = signal(this.readEnabled());
@@ -102,7 +105,7 @@ export class PushNotificationService {
         title: 'تم تفعيل الإشعارات',
         body: 'ستصلك تنبيهات الإجازات والرواتب',
         tag: `emp-welcome-${Date.now()}`,
-        data: { url: '/home' },
+        data: { url: DEFAULT_URL },
       });
 
       return true;
@@ -143,6 +146,25 @@ export class PushNotificationService {
     this.supported.set(this.isPushSupported());
     if (this.listening) return;
     this.listening = true;
+
+    if (typeof navigator !== 'undefined' && navigator.serviceWorker) {
+      navigator.serviceWorker.addEventListener('message', (event) => {
+        const data = event.data;
+        if (data?.type === 'NAVIGATE' && typeof data.url === 'string') {
+          this.navigateTo(data.url);
+        }
+      });
+    }
+
+    if (this.swPush?.isEnabled) {
+      this.swPush.notificationClicks.subscribe((ev) => {
+        const url =
+          (ev.notification?.data as { url?: string } | undefined)?.url ||
+          DEFAULT_URL;
+        this.navigateTo(url);
+      });
+    }
+
     if (this.enabled() || Notification.permission === 'granted') {
       this.startInboxPolling();
     }
@@ -166,16 +188,7 @@ export class PushNotificationService {
       const fresh = items.filter((i) => !this.seenInbox.has(i.id));
       for (const item of fresh) {
         this.seenInbox.add(item.id);
-        try {
-          new Notification(item.title, {
-            body: item.body,
-            tag: `inbox-${item.id}`,
-            dir: 'rtl',
-            lang: 'ar',
-          });
-        } catch {
-          /* ignore */
-        }
+        await this.showClickableNotification(item, DEFAULT_URL);
       }
       await firstValueFrom(
         this.http.post(`${environment.apiUrl}/employee/push/inbox/read`, {
@@ -185,6 +198,45 @@ export class PushNotificationService {
     } catch {
       /* ignore */
     }
+  }
+
+  private async showClickableNotification(
+    item: { id: string; title: string; body: string; url?: string },
+    fallbackUrl: string,
+  ): Promise<void> {
+    const url = item.url?.startsWith('/') ? item.url : fallbackUrl;
+    const ready = await navigator.serviceWorker.ready.catch(() => null);
+    if (ready?.active) {
+      ready.active.postMessage({
+        type: 'SHOW_LOCAL',
+        title: item.title,
+        body: item.body,
+        tag: `inbox-${item.id}`,
+        data: { url },
+      });
+      return;
+    }
+    try {
+      const n = new Notification(item.title, {
+        body: item.body,
+        tag: `inbox-${item.id}`,
+        dir: 'rtl',
+        lang: 'ar',
+        data: { url },
+      });
+      n.onclick = () => {
+        window.focus();
+        this.navigateTo(url);
+        n.close();
+      };
+    } catch {
+      /* ignore */
+    }
+  }
+
+  private navigateTo(url: string): void {
+    const path = url.startsWith('/') ? url : DEFAULT_URL;
+    void this.router.navigateByUrl(path);
   }
 
   private async resolveVapidPublicKey(): Promise<string> {
