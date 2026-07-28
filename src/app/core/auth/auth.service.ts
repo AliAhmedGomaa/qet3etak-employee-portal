@@ -19,6 +19,7 @@ export class AuthService {
   readonly user = this.userSignal.asReadonly();
   readonly token = this.tokenSignal.asReadonly();
   readonly isAuthenticated = computed(() => !!this.tokenSignal());
+  readonly isActive = computed(() => this.userSignal()?.status === 'ACTIVE');
 
   login(phone: string, password: string): Observable<AuthResponse> {
     return this.http
@@ -27,6 +28,19 @@ export class AuthService {
         password,
       })
       .pipe(tap((res) => this.persistSession(res)));
+  }
+
+  refreshMe(): Observable<EmployeeUser> {
+    return this.http.get<EmployeeUser>(`${environment.apiUrl}/auth/me`).pipe(
+      tap((user) => {
+        this.userSignal.set(user);
+        try {
+          localStorage.setItem(USER_KEY, JSON.stringify(user));
+        } catch {
+          /* ignore */
+        }
+      }),
+    );
   }
 
   logout(): void {

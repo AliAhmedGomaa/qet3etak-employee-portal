@@ -160,7 +160,9 @@ export class EmployeeLogin {
     this.auth.login(this.phone.trim(), this.password).subscribe({
       next: () => {
         this.busy.set(false);
-        void this.router.navigateByUrl('/home');
+        void this.router.navigateByUrl(
+          this.auth.isActive() ? '/home' : '/inactive',
+        );
       },
       error: (err: { error?: { message?: string } }) => {
         this.busy.set(false);

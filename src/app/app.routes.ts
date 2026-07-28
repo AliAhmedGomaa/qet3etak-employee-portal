@@ -1,5 +1,9 @@
 import { Routes } from '@angular/router';
-import { employeeAuthGuard, employeeGuestGuard } from './core/auth/auth.guards';
+import {
+  employeeAuthGuard,
+  employeeGuestGuard,
+  employeeInactiveGuard,
+} from './core/auth/auth.guards';
 
 export const routes: Routes = [
   {
@@ -7,6 +11,14 @@ export const routes: Routes = [
     canActivate: [employeeGuestGuard],
     loadComponent: () =>
       import('./features/login/employee-login').then((m) => m.EmployeeLogin),
+  },
+  {
+    path: 'inactive',
+    canActivate: [employeeInactiveGuard],
+    loadComponent: () =>
+      import('./features/inactive/account-inactive').then(
+        (m) => m.AccountInactivePage,
+      ),
   },
   {
     path: '',

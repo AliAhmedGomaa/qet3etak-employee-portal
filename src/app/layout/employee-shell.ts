@@ -4,7 +4,7 @@ import {
   afterNextRender,
   inject,
 } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../core/auth/auth.service';
 import { BrandingService } from '../core/branding/branding.service';
 import { ChatService } from '../core/chat/chat.service';
@@ -25,12 +25,24 @@ export class EmployeeShell {
   protected readonly theme = inject(ThemeService);
   protected readonly push = inject(PushNotificationService);
   protected readonly chat = inject(ChatService);
+  private readonly router = inject(Router);
 
   constructor() {
     afterNextRender(() => {
-      this.push.listenForPush();
-      this.chat.connect();
-      this.chat.loadThread().subscribe();
+      this.auth.refreshMe().subscribe({
+        next: () => {
+          if (!this.auth.isActive()) {
+            void this.router.navigateByUrl('/inactive');
+            return;
+          }
+          this.push.listenForPush();
+          this.chat.connect();
+          this.chat.loadThread().subscribe();
+        },
+        error: () => {
+          this.push.listenForPush();
+        },
+      });
     });
   }
 }
