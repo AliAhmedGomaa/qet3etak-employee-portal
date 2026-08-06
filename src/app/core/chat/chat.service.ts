@@ -104,25 +104,8 @@ export class ChatService {
     );
     if (message.senderRole !== 'EMPLOYEE') {
       this.adminTyping.set(false);
-      this.notifyIfBackground('دعم قطع الغيار', message.text);
     }
-  }
-
-  private notifyIfBackground(title: string, body: string): void {
-    if (typeof document === 'undefined' || typeof Notification === 'undefined') {
-      return;
-    }
-    if (Notification.permission !== 'granted') return;
-    if (document.visibilityState === 'visible') return;
-    try {
-      new Notification(title, {
-        body: body.slice(0, 120),
-        tag: `chat-local-${Date.now()}`,
-        dir: 'rtl',
-        lang: 'ar',
-      });
-    } catch {
-      /* ignore */
-    }
+    // Push notifications come from the server (web-push / inbox).
+    // Do not show a second local Notification here — it has no click URL.
   }
 }
