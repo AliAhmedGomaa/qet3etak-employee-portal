@@ -35,12 +35,12 @@ export class EmployeeShell {
             void this.router.navigateByUrl('/inactive');
             return;
           }
-          this.push.listenForPush();
+          void this.push.ensureEnabled();
           this.chat.connect();
           this.chat.loadThread().subscribe();
         },
         error: () => {
-          this.push.listenForPush();
+          void this.push.ensureEnabled();
         },
       });
     });

@@ -15,7 +15,6 @@ import {
   VacationItem,
   currentYearMonth,
 } from '../../core/employee/employee-api.service';
-import { PushNotificationService } from '../../core/push/push-notification.service';
 
 @Component({
   selector: 'app-employee-home',
@@ -32,12 +31,6 @@ import { PushNotificationService } from '../../core/push/push-notification.servi
           <input type="month" [ngModel]="month()" (ngModelChange)="onMonth($event)" />
         </label>
       </header>
-
-      @if (!push.enabled() && push.supported()) {
-        <button type="button" class="nudge" (click)="push.enable()">
-          فعّل الإشعارات ليصلك تنبيه عند الموافقة على الإجازة أو صرف الراتب
-        </button>
-      }
 
       @if (error()) {
         <p class="err">{{ error() }}</p>
@@ -276,7 +269,6 @@ import { PushNotificationService } from '../../core/push/push-notification.servi
 })
 export class EmployeeHome implements OnInit {
   private readonly api = inject(EmployeeApiService);
-  protected readonly push = inject(PushNotificationService);
   protected readonly data = signal<EmployeeDashboard | null>(null);
   protected readonly loading = signal(true);
   protected readonly error = signal<string | null>(null);
